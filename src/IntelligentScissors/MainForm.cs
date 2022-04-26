@@ -33,10 +33,11 @@ namespace IntelligentScissors
 
         private void btnGaussSmooth_Click(object sender, EventArgs e)
         {
-            double sigma = double.Parse(txtGaussSigma.Text);
-            int maskSize = (int)nudMaskSize.Value ;
-            ImageMatrix = ImageOperations.GaussianFilter1D(ImageMatrix, maskSize, sigma);
-            ImageOperations.DisplayImage(ImageMatrix, pictureBox2);
+            //double sigma = double.Parse(txtGaussSigma.Text);
+            //int maskSize = (int)nudMaskSize.Value ;
+            //ImageMatrix = ImageOperations.GaussianFilter1D(ImageMatrix, maskSize, sigma);
+            //ImageOperations.DisplayImage(ImageMatrix, pictureBox2);
+            Graph.Init(ImageMatrix, 4);
         }
 
        
