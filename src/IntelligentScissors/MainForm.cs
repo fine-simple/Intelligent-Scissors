@@ -13,6 +13,7 @@ namespace IntelligentScissors
         public bool EnableLasso = false;
         Point anchorPoint, lastPoint, currentPoint;
         Pen pen;
+        List<Point> lasso;
         public MainForm()
         {
             InitializeComponent();
@@ -39,13 +40,17 @@ namespace IntelligentScissors
         private void MainForm_Paint(object sender, PaintEventArgs e)
         {
             pen = new Pen(Color.FromArgb(255, 255, 0, 0));
+        }
 
-            Point controlLoc = this.PointToScreen(pictureBox1.Location); // location of the pitcture to screen(not form)
-            /* last and current points co-ordinates are relative to picture however drawing is relative to
-               the form window
-               TODO: Map the co-ordinates to display the line on the picture
-             */
-            e.Graphics.DrawLine(pen, (float)lastPoint.X, (float)lastPoint.Y, (float)currentPoint.X, (float)currentPoint.Y);
+        private void pictureBox1_Paint(object sender, PaintEventArgs e)
+        {
+            if (EnableLasso)
+            {
+                for (int i = 0; i < lasso.Count - 1; i++)
+                {
+                    e.Graphics.DrawLine(pen, lasso[i], lasso[i + 1]);
+                }
+            }
         }
 
         private void btnGaussSmooth_Click(object sender, EventArgs e)
@@ -57,34 +62,42 @@ namespace IntelligentScissors
         { 
             if (!EnableLasso) // first click on picture
             {
-                anchorPoint = new Point();
-                anchorPoint.X = e.Location.X;
-                anchorPoint.Y = e.Location.Y;
-                lastPoint = anchorPoint;
-
-                currentPoint = new Point();
-                currentPoint.X = e.Location.X;
-                currentPoint.Y = e.Location.Y;
-                currentPoint = anchorPoint;
-
+                initializeLasso(e.Location);
                 mousePos.Text = anchorPoint.ToString();
-
-                EnableLasso = true;
 
             }
             else
             {
-                lastPoint.X = currentPoint.X;
-                lastPoint.Y = currentPoint.Y;
-
-                currentPoint.X = e.Location.X;
-                currentPoint.Y = e.Location.Y;
-
+                updateLasso(e.Location);
                 mousePos.Text = currentPoint.ToString();
             }
 
-            // used to force the form to re-draw (aka call MainForm_Paint)
-            this.Invalidate();
+            // used to force the picture box to re-draw (aka call pictureBox1_Paint)
+            pictureBox1.Invalidate();
+        }
+
+        private void initializeLasso(Point mousePosition)
+        {
+            lasso = new List<Point>();
+            anchorPoint = new Point();
+            anchorPoint = mousePosition;
+            lastPoint = anchorPoint;
+
+            currentPoint = new Point();
+            currentPoint = anchorPoint;
+
+            lasso.Add(lastPoint);
+            lasso.Add(currentPoint);
+
+            EnableLasso = true;
+        }
+
+        private void updateLasso(Point mousePosition)
+        {
+            lastPoint = currentPoint;
+            currentPoint = mousePosition;
+
+            lasso.Add(currentPoint);
         }
     }
 }
