@@ -31,6 +31,12 @@ namespace IntelligentScissors
     {
         public double X { get; set; }
         public double Y { get; set; }
+
+        override
+        public string ToString()
+        {
+            return "(" + X + " , " + Y + ")"; 
+        }
     }
 
     /// <summary>
