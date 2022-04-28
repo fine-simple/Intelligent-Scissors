@@ -9,7 +9,8 @@ namespace IntelligentScissors
     class Graph
     {
         static int CONNECTIVITY = 4;
-        static List<KeyValuePair<int, double>>[] adj;
+        static double WEIGHT_UPPER_LIMIT = 1e16;
+        public static List<KeyValuePair<int, double>>[] adj;
         static int vertexCount;
         static int imageWidth, imageHeight;
         public static void Init(RGBPixel[,] ImageMatrix, int connectivity)
@@ -46,8 +47,8 @@ namespace IntelligentScissors
          */
         private static void addEnergyFor(int row, int col, Vector2D pixelEnergies)
         {
-            double rightPixelEnergy = pixelEnergies.X;
-            double botPixelEnergy = pixelEnergies.Y;
+            double rightPixelEnergy = pixelEnergies.X == 0? WEIGHT_UPPER_LIMIT: 1 / pixelEnergies.X;
+            double botPixelEnergy = pixelEnergies.Y == 0 ? WEIGHT_UPPER_LIMIT : 1 / pixelEnergies.Y;
 
             int mainPixelIndex = convert2DIndexTo1D(row, col);
 

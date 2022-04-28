@@ -116,7 +116,7 @@ namespace IntelligentScissors
             this.btnGaussSmooth.Name = "btnGaussSmooth";
             this.btnGaussSmooth.Size = new System.Drawing.Size(109, 76);
             this.btnGaussSmooth.TabIndex = 5;
-            this.btnGaussSmooth.Text = "Create Lasso";
+            this.btnGaussSmooth.Text = "Perform Test";
             this.btnGaussSmooth.UseVisualStyleBackColor = true;
             this.btnGaussSmooth.Click += new System.EventHandler(this.btnGaussSmooth_Click);
             // 
@@ -280,6 +280,7 @@ namespace IntelligentScissors
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainForm";
             this.Text = "Intelligent Scissors...";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.MainForm_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();

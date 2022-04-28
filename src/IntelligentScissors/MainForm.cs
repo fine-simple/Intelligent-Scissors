@@ -55,6 +55,8 @@ namespace IntelligentScissors
 
         private void btnGaussSmooth_Click(object sender, EventArgs e)
         {
+            //TODO: Add gui logic to choose type of test
+            Test.Graph.sample(Graph.adj, Test.SampleType.Sample2);
             
         }
 
@@ -74,6 +76,11 @@ namespace IntelligentScissors
 
             // used to force the picture box to re-draw (aka call pictureBox1_Paint)
             pictureBox1.Invalidate();
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            
         }
 
         private void initializeLasso(Point mousePosition)
