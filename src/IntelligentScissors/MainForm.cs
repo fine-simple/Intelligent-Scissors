@@ -11,15 +11,15 @@ namespace IntelligentScissors
     public partial class MainForm : Form
     {
         public bool EnableLasso = false;
-        Point anchorPoint, lastPoint, currentPoint;
+        Point anchorPoint, lastPoint, currentPoint, freePoint;
         Pen pen;
         List<Point> lasso;
+        RGBPixel[,] ImageMatrix;
+
         public MainForm()
         {
             InitializeComponent();
         }
-
-        RGBPixel[,] ImageMatrix;
 
         private void btnOpen_Click(object sender, EventArgs e)
         {
@@ -37,11 +37,11 @@ namespace IntelligentScissors
             Graph.Init(ImageMatrix, 4);
         }
 
-        private void MainForm_Paint(object sender, PaintEventArgs e)
+        private Rectangle getAnchorRect(Point mousePos)
         {
-            pen = new Pen(Color.FromArgb(255, 255, 0, 0));
+            int size = 5;
+            return new Rectangle((int)(mousePos.X - 0.5 * size), (int)(mousePos.Y - 0.5 * size), size, size);
         }
-
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             if (EnableLasso)
@@ -49,7 +49,10 @@ namespace IntelligentScissors
                 for (int i = 0; i < lasso.Count - 1; i++)
                 {
                     e.Graphics.DrawLine(pen, lasso[i], lasso[i + 1]);
+                    e.Graphics.DrawRectangle(pen, getAnchorRect(lasso[i]));
                 }
+                e.Graphics.DrawRectangle(pen, getAnchorRect(lasso[lasso.Count -1]));
+                e.Graphics.DrawLine(pen, lasso[lasso.Count - 1], freePoint);
             }
         }
 
@@ -61,30 +64,38 @@ namespace IntelligentScissors
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
-        { 
+        {
+            if (e.Button != MouseButtons.Left)
+                return;
             if (!EnableLasso) // first click on picture
             {
                 initializeLasso(e.Location);
-                mousePos.Text = anchorPoint.ToString();
-
             }
             else
             {
                 updateLasso(e.Location);
-                mousePos.Text = currentPoint.ToString();
             }
-
             // used to force the picture box to re-draw (aka call pictureBox1_Paint)
             pictureBox1.Invalidate();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            
+            pen = new Pen(Color.FromArgb(255, 255, 0, 0));
+        }
+
+        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            txtMousePos.Text = $"{e.Location.X}, {e.Location.Y}";
+            freePoint = e.Location;
+            if (EnableLasso)
+                pictureBox1.Invalidate();
         }
 
         private void initializeLasso(Point mousePosition)
         {
+            if (ImageMatrix == null)
+                return;
             lasso = new List<Point>();
             anchorPoint = new Point();
             anchorPoint = mousePosition;
