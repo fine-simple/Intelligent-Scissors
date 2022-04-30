@@ -59,21 +59,30 @@ namespace IntelligentScissors
         private void btnGaussSmooth_Click(object sender, EventArgs e)
         {
             //TODO: Add gui logic to choose type of test
-            Test.Graph.sample(Graph.adj, Test.SampleType.Sample2);
-            
+            Test.Graph.sample(Graph.adj, Test.SampleType.Sample1);
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button != MouseButtons.Left)
-                return;
             if (!EnableLasso) // first click on picture
             {
-                initializeLasso(e.Location);
+                if(e.Button == MouseButtons.Left)
+                    initializeLasso(e.Location);
             }
             else
             {
-                updateLasso(e.Location);
+                if (e.Button == MouseButtons.Left)
+                    updateLasso(e.Location);
+                else if (e.Button == MouseButtons.Right)
+                {
+                    if(lasso.Count > 2)
+                        lasso.RemoveAt(lasso.Count - 1);
+                    else
+                    {
+                        lasso.Clear();
+                        EnableLasso = false;
+                    }
+                }
             }
             // used to force the picture box to re-draw (aka call pictureBox1_Paint)
             pictureBox1.Invalidate();
