@@ -35,6 +35,9 @@ namespace IntelligentScissors
 
                 PriorityQueue.Dequeue();
 
+                if (currentCost > dist[currentNode])
+                    continue;
+
                 foreach(KeyValuePair<int, double> adjNode in adj[currentNode])
                 {
                     int Child = adjNode.Key;
