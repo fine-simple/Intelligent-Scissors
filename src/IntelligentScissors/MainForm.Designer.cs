@@ -38,6 +38,8 @@ namespace IntelligentScissors
             this.panel1 = new System.Windows.Forms.Panel();
             this.mousePos = new System.Windows.Forms.Label();
             this.txtMousePos = new System.Windows.Forms.TextBox();
+            this.freqTextBox = new System.Windows.Forms.TextBox();
+            this.freqLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -46,7 +48,7 @@ namespace IntelligentScissors
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(1314, 536);
             this.pictureBox1.TabIndex = 0;
@@ -59,7 +61,7 @@ namespace IntelligentScissors
             // 
             this.btnOpen.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOpen.Location = new System.Drawing.Point(375, 589);
-            this.btnOpen.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnOpen.Margin = new System.Windows.Forms.Padding(4);
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.Size = new System.Drawing.Size(208, 91);
             this.btnOpen.TabIndex = 2;
@@ -71,7 +73,7 @@ namespace IntelligentScissors
             // 
             this.btnGaussSmooth.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGaussSmooth.Location = new System.Drawing.Point(759, 589);
-            this.btnGaussSmooth.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnGaussSmooth.Margin = new System.Windows.Forms.Padding(4);
             this.btnGaussSmooth.Name = "btnGaussSmooth";
             this.btnGaussSmooth.Size = new System.Drawing.Size(218, 91);
             this.btnGaussSmooth.TabIndex = 5;
@@ -83,7 +85,7 @@ namespace IntelligentScissors
             // 
             this.txtHeight.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtHeight.Location = new System.Drawing.Point(99, 621);
-            this.txtHeight.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtHeight.Margin = new System.Windows.Forms.Padding(4);
             this.txtHeight.Name = "txtHeight";
             this.txtHeight.ReadOnly = true;
             this.txtHeight.Size = new System.Drawing.Size(84, 31);
@@ -94,7 +96,7 @@ namespace IntelligentScissors
             // 
             this.txtWidth.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtWidth.Location = new System.Drawing.Point(99, 566);
-            this.txtWidth.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtWidth.Margin = new System.Windows.Forms.Padding(4);
             this.txtWidth.Name = "txtWidth";
             this.txtWidth.ReadOnly = true;
             this.txtWidth.Size = new System.Drawing.Size(84, 31);
@@ -130,7 +132,7 @@ namespace IntelligentScissors
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Location = new System.Drawing.Point(18, 18);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1318, 540);
             this.panel1.TabIndex = 15;
@@ -150,18 +152,38 @@ namespace IntelligentScissors
             // 
             this.txtMousePos.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtMousePos.Location = new System.Drawing.Point(18, 687);
-            this.txtMousePos.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtMousePos.Margin = new System.Windows.Forms.Padding(4);
             this.txtMousePos.Name = "txtMousePos";
             this.txtMousePos.ReadOnly = true;
             this.txtMousePos.Size = new System.Drawing.Size(151, 31);
             this.txtMousePos.TabIndex = 18;
             this.txtMousePos.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // freqTextBox
+            // 
+            this.freqTextBox.Location = new System.Drawing.Point(1234, 614);
+            this.freqTextBox.Name = "freqTextBox";
+            this.freqTextBox.Size = new System.Drawing.Size(100, 27);
+            this.freqTextBox.TabIndex = 19;
+            this.freqTextBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // freqLabel
+            // 
+            this.freqLabel.AutoSize = true;
+            this.freqLabel.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.freqLabel.Location = new System.Drawing.Point(1232, 589);
+            this.freqLabel.Name = "freqLabel";
+            this.freqLabel.Size = new System.Drawing.Size(105, 22);
+            this.freqLabel.TabIndex = 20;
+            this.freqLabel.Text = "Frequency";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1356, 731);
+            this.Controls.Add(this.freqLabel);
+            this.Controls.Add(this.freqTextBox);
             this.Controls.Add(this.txtMousePos);
             this.Controls.Add(this.mousePos);
             this.Controls.Add(this.panel1);
@@ -171,7 +193,7 @@ namespace IntelligentScissors
             this.Controls.Add(this.txtHeight);
             this.Controls.Add(this.btnGaussSmooth);
             this.Controls.Add(this.btnOpen);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainForm";
             this.Text = "Intelligent Scissors...";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -194,6 +216,8 @@ namespace IntelligentScissors
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label mousePos;
         private System.Windows.Forms.TextBox txtMousePos;
+        private System.Windows.Forms.TextBox freqTextBox;
+        private System.Windows.Forms.Label freqLabel;
     }
 }
 

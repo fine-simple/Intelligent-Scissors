@@ -11,6 +11,8 @@ namespace IntelligentScissors
     public partial class MainForm : Form
     {
         public bool EnableLasso = false;
+        bool FreqEnabled = false;
+        int Frequency = -1;
         Point anchorPoint, lastPoint, currentPoint, freePoint;
         Pen pen;
         List<Point> lasso;
@@ -58,9 +60,16 @@ namespace IntelligentScissors
                     e.Graphics.DrawRectangle(pen, getAnchorRect(lasso[i]));
                 }
 
-                List<Point> LiveWire = ShortestPathHelpers.GetShortestPath(lasso[lasso.Count - 1], freePoint, Graph.adj);
-                DrawPath(LiveWire, e);
+                DrawLiveWire(e);
             }
+        }
+        private void DrawLiveWire(PaintEventArgs pe)
+        {
+            List<Point> LiveWire = ShortestPathHelpers.GetShortestPath(lasso[lasso.Count - 1], freePoint, Graph.adj);
+            if (FreqEnabled && LiveWire.Count >= Frequency && Graph.validIndex(freePoint.Y, freePoint.X))
+                updateLasso(freePoint);
+
+            DrawPath(LiveWire, pe);
         }
         private void DrawPath(List<Point>path, PaintEventArgs e)
         {
@@ -112,6 +121,18 @@ namespace IntelligentScissors
             freePoint = e.Location;
             if (EnableLasso)
                 pictureBox1.Invalidate();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (freqTextBox.TextLength == 0)
+                FreqEnabled = false;
+            else
+            {
+                FreqEnabled = true;
+                Frequency = int.Parse(freqTextBox.Text);
+            }
+
         }
 
         private void initializeLasso(Point mousePosition)

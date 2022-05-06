@@ -92,7 +92,7 @@ namespace IntelligentScissors
             return new KeyValuePair<int, int>(row, col);
         }
 
-        private static bool validIndex(int row, int col)
+        public static bool validIndex(int row, int col)
         {
             bool lowerBound = (row >= 0 && col >= 0);
             bool upperBound = (row < imageHeight && col < imageWidth);
