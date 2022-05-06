@@ -15,6 +15,8 @@ namespace IntelligentScissors
         Pen pen;
         List<Point> lasso;
         RGBPixel[,] ImageMatrix;
+        // Shortest Path between each Anchor and the one before it (starts from second anchor)
+        Dictionary<Point, List<Point>> AnchorPaths;
 
         public MainForm()
         {
@@ -29,6 +31,9 @@ namespace IntelligentScissors
                 //Open the browsed image and display it
                 string OpenedFilePath = openFileDialog1.FileName;
                 ImageMatrix = ImageOperations.OpenImage(OpenedFilePath);
+                double sigma = 1;
+                int maskSize = 2;
+                ImageMatrix = ImageOperations.GaussianFilter1D(ImageMatrix, maskSize, sigma);
                 ImageOperations.DisplayImage(ImageMatrix, pictureBox1);
             }
             txtWidth.Text = ImageOperations.GetWidth(ImageMatrix).ToString();
@@ -48,14 +53,22 @@ namespace IntelligentScissors
             {
                 for (int i = 0; i < lasso.Count - 1; i++)
                 {
-                    e.Graphics.DrawLine(pen, lasso[i], lasso[i + 1]);
+                    //e.Graphics.DrawLine(pen, lasso[i], lasso[i + 1]);
+                    if (lasso.Count > 1 && AnchorPaths.ContainsKey(lasso[lasso.Count - 1]))
+                        DrawPath(AnchorPaths[lasso[lasso.Count - 1]], e);
                     e.Graphics.DrawRectangle(pen, getAnchorRect(lasso[i]));
                 }
                 e.Graphics.DrawRectangle(pen, getAnchorRect(lasso[lasso.Count -1]));
                 e.Graphics.DrawLine(pen, lasso[lasso.Count - 1], freePoint);
             }
         }
-
+        private void DrawPath(List<Point>path, PaintEventArgs e)
+        {
+            for (int i = 1; i < path.Count; i++)
+            {
+                e.Graphics.DrawLine(pen, path[i - 1], path[i]);
+            }
+        }
         private void btnGaussSmooth_Click(object sender, EventArgs e)
         {
             //TODO: Add gui logic to choose type of test
@@ -117,6 +130,8 @@ namespace IntelligentScissors
             lasso.Add(currentPoint);
 
             EnableLasso = true;
+
+            AnchorPaths = new Dictionary<Point, List<Point>>();
         }
 
         private void updateLasso(Point mousePosition)
@@ -125,6 +140,17 @@ namespace IntelligentScissors
             currentPoint = mousePosition;
 
             lasso.Add(currentPoint);
+
+            if (lasso.Count > 1)
+                updateAnchorPaths();
+        }
+
+        private void updateAnchorPaths()
+        {
+            Point srcAnchor = lasso[lasso.Count - 2];
+            Point destAnchor = lasso[lasso.Count - 1];
+
+            AnchorPaths[destAnchor] = ShortestPathHelpers.GetShortestPath(srcAnchor, destAnchor, Graph.adj);
         }
     }
 }

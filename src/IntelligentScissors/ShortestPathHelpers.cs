@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using QuickGraph.Collections;
+using System.Drawing;
 
 namespace IntelligentScissors
 {
     public static class ShortestPathHelpers
     {
         
-        public static int[] Dijkstra(int src, int dest, List<KeyValuePair<int, double>>[] adj)
+        private static int[] Dijkstra(int src, int dest, List<KeyValuePair<int, double>>[] adj)
         {
 
             double[] dist = Enumerable.Repeat(double.MaxValue, adj.Count()).ToArray();
@@ -56,7 +57,7 @@ namespace IntelligentScissors
         }
 
         // Backtracking to get shortest path from source to destination
-        public static List<int> GetPath(int[] parent, int Dest)
+        private static List<int> GetPath(int[] parent, int Dest)
         {
             List<int> Path = new List<int>();
             int currentNode = Dest;
@@ -72,12 +73,25 @@ namespace IntelligentScissors
             return Path;
         }
 
-        public static List<int> GetShortestPath(int src, int dest, List<KeyValuePair<int, double>>[] adj)
+        public static List<Point> GetShortestPath(Point srcPoint, Point destPoint, List<KeyValuePair<int, double>>[] adj)
         {
+            int src = Graph.convert2DIndexTo1D(srcPoint.Y, srcPoint.X);
+            int dest = Graph.convert2DIndexTo1D(destPoint.Y, destPoint.X);
+
             int[] parent = Dijkstra(src, dest, adj);
             List<int> ShortestPath = GetPath(parent, dest);
 
-            return ShortestPath;
+            List<Point> ShortestPathPoints = new List<Point>();
+
+            foreach(int node in ShortestPath)
+            {
+                KeyValuePair<int, int> point = Graph.convert1DIndexTo2D(node);
+                Point nodePoint = new Point(point.Value, point.Key);
+
+                ShortestPathPoints.Add(nodePoint);
+            }
+
+            return ShortestPathPoints;
         }
     }
 }

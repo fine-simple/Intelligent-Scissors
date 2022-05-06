@@ -79,9 +79,17 @@ namespace IntelligentScissors
             adj[mainPixelIndex].Add(new KeyValuePair<int, double>(neighbourIndex, energy));
         }
 
-        private static int convert2DIndexTo1D(int row, int col)
+        public static int convert2DIndexTo1D(int row, int col)
         {
             return row * imageWidth + col;
+        }
+
+        public static KeyValuePair<int, int> convert1DIndexTo2D(int index)
+        {
+            int col = index % imageWidth;
+            int row = (index-col) / imageWidth;
+
+            return new KeyValuePair<int, int>(row, col);
         }
 
         private static bool validIndex(int row, int col)
