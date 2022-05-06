@@ -51,15 +51,15 @@ namespace IntelligentScissors
         {
             if (EnableLasso)
             {
-                for (int i = 0; i < lasso.Count - 1; i++)
+                for (int i = 1; i < lasso.Count; i++)
                 {
-                    //e.Graphics.DrawLine(pen, lasso[i], lasso[i + 1]);
-                    if (lasso.Count > 1 && AnchorPaths.ContainsKey(lasso[lasso.Count - 1]))
-                        DrawPath(AnchorPaths[lasso[lasso.Count - 1]], e);
+                    if (AnchorPaths.ContainsKey(lasso[i]))
+                        DrawPath(AnchorPaths[lasso[i]], e);
                     e.Graphics.DrawRectangle(pen, getAnchorRect(lasso[i]));
                 }
-                e.Graphics.DrawRectangle(pen, getAnchorRect(lasso[lasso.Count -1]));
-                e.Graphics.DrawLine(pen, lasso[lasso.Count - 1], freePoint);
+
+                List<Point> LiveWire = ShortestPathHelpers.GetShortestPath(lasso[lasso.Count - 1], freePoint, Graph.adj);
+                DrawPath(LiveWire, e);
             }
         }
         private void DrawPath(List<Point>path, PaintEventArgs e)
