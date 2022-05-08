@@ -34,8 +34,8 @@ namespace IntelligentScissors
                 string OpenedFilePath = openFileDialog1.FileName;
                 ImageMatrix = ImageOperations.OpenImage(OpenedFilePath);
                 double sigma = 1;
-                int maskSize = 2;
-                ImageMatrix = ImageOperations.GaussianFilter1D(ImageMatrix, maskSize, sigma);
+                int maskSize = 3;
+                //ImageMatrix = ImageOperations.GaussianFilter1D(ImageMatrix, maskSize, sigma);
                 ImageOperations.DisplayImage(ImageMatrix, pictureBox1);
             }
             txtWidth.Text = ImageOperations.GetWidth(ImageMatrix).ToString();
@@ -81,7 +81,26 @@ namespace IntelligentScissors
         private void btnGaussSmooth_Click(object sender, EventArgs e)
         {
             //TODO: Add gui logic to choose type of test
-            Test.Graph.sample(Graph.adj, Test.SampleType.Sample1);
+            switch(testsBox.Text)
+            {
+                case "Sample1":
+                    Test.Graph.sample(Graph.adj, Test.SampleType.Sample1);
+                    break;
+                case "Sample2":
+                    Test.Graph.sample(Graph.adj, Test.SampleType.Sample2);
+                    break;
+                case "Sample3":
+                    Test.Graph.sample(Graph.adj, Test.SampleType.Sample3);
+                    break;
+                case "Complete1":
+                    Test.Graph.complete(Graph.adj, Test.CompleteType.Complete1);
+                    break;
+                case "Complete2":
+                    Test.Graph.complete(Graph.adj, Test.CompleteType.Complete2);
+                    break;
+
+            }
+            
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -113,6 +132,13 @@ namespace IntelligentScissors
         private void MainForm_Load(object sender, EventArgs e)
         {
             pen = new Pen(Color.FromArgb(255, 255, 0, 0));
+            testsBox.Items.Add("Sample1");
+            testsBox.Items.Add("Sample2");
+            testsBox.Items.Add("Sample3");
+            testsBox.Items.Add("Complete1");
+            testsBox.Items.Add("Complete2");
+
+            testsBox.SelectedIndex = 0;
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
@@ -132,6 +158,11 @@ namespace IntelligentScissors
                 FreqEnabled = true;
                 Frequency = int.Parse(freqTextBox.Text);
             }
+
+        }
+
+        private void testsBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
         }
 

@@ -9,7 +9,7 @@ namespace IntelligentScissors
 {
     class Test
     {
-        static double EPS = 1;
+        static double EPS = 5;
         public enum SampleType
         {
             Sample1, Sample2, Sample3
@@ -42,7 +42,17 @@ namespace IntelligentScissors
                         string edgeLine = reader.ReadLine();
                         while(!edgeLine.Equals(String.Empty))
                         {
-                            if (!verifyEdge(graph, edgeLine))
+                            string[] edgeWords = edgeLine.Split(' ');
+
+                            int fromIndex = 4, toIndex = 8, weightIndex = edgeWords.Length - 1;
+
+                            int from = Convert.ToInt32(edgeWords[fromIndex]);
+                            int to = Convert.ToInt32(edgeWords[toIndex]);
+                            double actualWeight;
+                
+                            actualWeight = Convert.ToDouble(edgeWords[weightIndex]);
+
+                            if (!verifyEdge(graph, from, to, actualWeight))
                                 testPassed = false;
 
                             edgeLine = reader.ReadLine();
@@ -61,34 +71,75 @@ namespace IntelligentScissors
             public static void complete(List<KeyValuePair<int, double>>[] graph, CompleteType type)
             {
                 //TODO: implement complete testing
-                throw new NotImplementedException();
+                string path = Cases.GetCompleteTestPath(CompleteType.Complete1);
+                bool testPassed = true;
+
+                using (StreamReader reader = new StreamReader(path))
+                {
+                    reader.ReadLine(); // skip header
+                    int node = 0;
+                    while(!reader.EndOfStream && node < 1000)
+                    {
+                        
+                        string line = reader.ReadLine();
+                        string edgesLine = line.Split(':')[1];
+                        string[] edges = edgesLine.Split(')');
+
+                        for (int i = 0; i < edges.Length - 1; i++)
+                        {
+                            string[] edgeWords = edges[i].Split(',');
+                            int toIndx = 1, weightIndx = 2;
+
+                            
+                            int to = Convert.ToInt32(edgeWords[toIndx]);
+                            double actualWeight = Convert.ToDouble(edgeWords[weightIndx]);
+
+                            if (!verifyEdge(graph, node, to, actualWeight))
+                            {
+                                testPassed = false;
+                            }
+
+                        }
+                        node++;
+                    }
+
+                    if (testPassed)
+                        Console.WriteLine("Congratulations! Complete Test " + type + " Passed Successfuly");
+                    else
+                        Console.WriteLine("Test Failed!");
+
+                }
             }
 
-            private static bool verifyEdge(List<KeyValuePair<int, double>>[] graph, string edgeLine)
+            
+            private static bool verifyEdge(List<KeyValuePair<int, double>>[] graph, int from, int to, double actualWeight)
             {
-                string[] edgeWords = edgeLine.Split(' ');
-
-                int fromIndex = 4, toIndex = 8, weightIndex = edgeWords.Length - 1;
-
-                int from = Convert.ToInt32(edgeWords[fromIndex]);
-                int to = Convert.ToInt32(edgeWords[toIndex]);
-                double weight;
-                
-                weight = Convert.ToDouble(edgeWords[weightIndex]);
 
                 bool edgeVerified = false;
+                double calculatedWeight = 0;
                 for (int i = 0; i < 4; i++) // search the 4 edges of the vertex
                 {
                     if (graph[from][i].Key == to)
                     {
-                        edgeVerified = Math.Abs(graph[from][i].Value - weight) <= EPS;
+                        calculatedWeight = graph[from][i].Value;
+                        edgeVerified = Math.Abs(calculatedWeight - actualWeight) <= EPS;
                         break;
                     }
                 }
 
                 if (!edgeVerified)
                 {
-                    Console.WriteLine("Edge From " + from + " To " + to + " Doesn't exist or has wrong weight");
+                    if (calculatedWeight == 0)
+                    {
+                        Console.WriteLine("Edge From " + from + " To " + to + " Doesn't exist");
+                        
+                    }
+                    else
+                    {
+                        Console.WriteLine("Edge From " + from + " To " + to + " has wrong weight");
+                        Console.WriteLine("Expected: " + actualWeight + " got " + calculatedWeight);
+                        
+                    }
                     return false;
                 }
 
