@@ -10,10 +10,9 @@ namespace IntelligentScissors
 {
     public partial class MainForm : Form
     {
-        public bool EnableLasso = false;
         bool FreqEnabled = false;
         int Frequency = -1;
-        Point anchorPoint, lastPoint, currentPoint, freePoint;
+        Point freePoint;
         Pen pen;
         List<Point> lasso;
         RGBPixel[,] ImageMatrix;
@@ -42,33 +41,46 @@ namespace IntelligentScissors
             txtHeight.Text = ImageOperations.GetHeight(ImageMatrix).ToString();
 
             Graph.Init(ImageMatrix, 4);
-        }
 
-        private Rectangle getAnchorRect(Point mousePos)
-        {
-            int size = 5;
-            return new Rectangle((int)(mousePos.X - 0.5 * size), (int)(mousePos.Y - 0.5 * size), size, size);
-        }
-        private void pictureBox1_Paint(object sender, PaintEventArgs e)
-        {
-            if (EnableLasso)
+            //check if zoom mode vertical scaled or horizontal scaled
+            float imageRatio = pictureBox1.Image.Width / (float)pictureBox1.Image.Height;
+            float boxRatio = pictureBox1.Width / (float)pictureBox1.Height;
+            if (imageRatio >= boxRatio)
             {
-                for (int i = 1; i < lasso.Count; i++)
-                {
-                    if (AnchorPaths.ContainsKey(lasso[i]))
-                        DrawPath(AnchorPaths[lasso[i]], e);
-                    e.Graphics.DrawRectangle(pen, getAnchorRect(lasso[i]));
-                }
-
-                DrawLiveWire(e);
+                DrawHelpers.horizontalScaled = true;
+                DrawHelpers.scaleFactor = pictureBox1.Width / (float)pictureBox1.Image.Width;
+                float scaledSize = pictureBox1.Image.Height * DrawHelpers.scaleFactor;
+                DrawHelpers.filler = Math.Abs(pictureBox1.Height - scaledSize) / 2;
+            }
+            else
+            {
+                DrawHelpers.scaleFactor = pictureBox1.Height / (float)pictureBox1.Image.Height;
+                float scaledSize = pictureBox1.Image.Width * DrawHelpers.scaleFactor;
+                DrawHelpers.filler = Math.Abs(pictureBox1.Width - scaledSize) / 2;
             }
         }
+        
+        private void pictureBox1_Paint(object sender, PaintEventArgs e)
+        {
+            if (ImageMatrix == null)
+                return;
+
+            for (int i = 0; i < lasso.Count; i++)
+            {
+                if (AnchorPaths.ContainsKey(DrawHelpers.unscaledPos(lasso[i])))
+                    DrawPath(AnchorPaths[DrawHelpers.unscaledPos(lasso[i])], e);
+                e.Graphics.DrawRectangle(pen, DrawHelpers.getAnchorRect(lasso[i]));
+            }
+            if(lasso.Count > 0)
+                DrawLiveWire(e);
+        }
+
         private void DrawLiveWire(PaintEventArgs pe)
         {
-            List<Point> LiveWire = ShortestPathHelpers.GetShortestPath(lasso[lasso.Count - 1], freePoint, Graph.adj);
-            if (FreqEnabled && LiveWire.Count >= Frequency && Graph.validIndex(freePoint.Y, freePoint.X))
-                updateLasso(freePoint);
-
+            Point p = DrawHelpers.unscaledPos(freePoint);
+            List<Point> LiveWire = ShortestPathHelpers.GetShortestPath(DrawHelpers.unscaledPos(lasso[lasso.Count - 1]), p, Graph.adj);
+            if (FreqEnabled && LiveWire.Count >= Frequency && Graph.validIndex(p.Y, p.X))
+                updateLasso();
             DrawPath(LiveWire, pe);
         }
         private void DrawPath(List<Point>path, PaintEventArgs e)
@@ -105,25 +117,16 @@ namespace IntelligentScissors
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            if (!EnableLasso) // first click on picture
+            if (ImageMatrix == null) // first click on picture
+                return;
+            if (e.Button == MouseButtons.Left)
+                updateLasso();
+            else if (e.Button == MouseButtons.Right)
             {
-                if(e.Button == MouseButtons.Left)
-                    initializeLasso(e.Location);
-            }
-            else
-            {
-                if (e.Button == MouseButtons.Left)
-                    updateLasso(e.Location);
-                else if (e.Button == MouseButtons.Right)
-                {
-                    if(lasso.Count > 2)
-                        lasso.RemoveAt(lasso.Count - 1);
-                    else
-                    {
-                        lasso.Clear();
-                        EnableLasso = false;
-                    }
-                }
+                if(lasso.Count > 1)
+                    lasso.RemoveAt(lasso.Count - 1);
+                else
+                    lasso.Clear();
             }
             // used to force the picture box to re-draw (aka call pictureBox1_Paint)
             pictureBox1.Invalidate();
@@ -139,14 +142,20 @@ namespace IntelligentScissors
             testsBox.Items.Add("Complete2");
 
             testsBox.SelectedIndex = 0;
+            lasso = new List<Point>();
+            AnchorPaths = new Dictionary<Point, List<Point>>();
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            txtMousePos.Text = $"{e.Location.X}, {e.Location.Y}";
+            Point p = DrawHelpers.unscaledPos(e.Location);
+            txtMousePos.Text = $"{p.X}, {p.Y}";
+            // mouse within image boundries
+            if (p.X < 0 || p.X > pictureBox1.Image.Width - 1
+             || p.Y < 0 || p.Y > pictureBox1.Image.Height - 1)
+                return;
             freePoint = e.Location;
-            if (EnableLasso)
-                pictureBox1.Invalidate();
+            pictureBox1.Invalidate();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -161,46 +170,18 @@ namespace IntelligentScissors
 
         }
 
-        private void testsBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void updateLasso()
         {
-
-        }
-
-        private void initializeLasso(Point mousePosition)
-        {
-            if (ImageMatrix == null)
-                return;
-            lasso = new List<Point>();
-            anchorPoint = new Point();
-            anchorPoint = mousePosition;
-            lastPoint = anchorPoint;
-
-            currentPoint = new Point();
-            currentPoint = anchorPoint;
-
-            lasso.Add(lastPoint);
-            lasso.Add(currentPoint);
-
-            EnableLasso = true;
-
-            AnchorPaths = new Dictionary<Point, List<Point>>();
-        }
-
-        private void updateLasso(Point mousePosition)
-        {
-            lastPoint = currentPoint;
-            currentPoint = mousePosition;
-
-            lasso.Add(currentPoint);
-
-            if (lasso.Count > 1)
-                updateAnchorPaths();
+            lasso.Add(freePoint);
+            updateAnchorPaths();
         }
 
         private void updateAnchorPaths()
         {
-            Point srcAnchor = lasso[lasso.Count - 2];
-            Point destAnchor = lasso[lasso.Count - 1];
+            if (lasso.Count < 2)
+                return;
+            Point srcAnchor = DrawHelpers.unscaledPos(lasso[lasso.Count - 2]);
+            Point destAnchor = DrawHelpers.unscaledPos(lasso[lasso.Count - 1]);
 
             AnchorPaths[destAnchor] = ShortestPathHelpers.GetShortestPath(srcAnchor, destAnchor, Graph.adj);
         }

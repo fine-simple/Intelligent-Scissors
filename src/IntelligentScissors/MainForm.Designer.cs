@@ -185,7 +185,6 @@ namespace IntelligentScissors
             this.testsBox.Name = "testsBox";
             this.testsBox.Size = new System.Drawing.Size(164, 24);
             this.testsBox.TabIndex = 21;
-            this.testsBox.SelectedIndexChanged += new System.EventHandler(this.testsBox_SelectedIndexChanged);
             // 
             // MainForm
             // 
