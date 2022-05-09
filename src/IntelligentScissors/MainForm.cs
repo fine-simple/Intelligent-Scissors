@@ -12,6 +12,7 @@ namespace IntelligentScissors
     public partial class MainForm : Form
     {
         bool FreqEnabled = false;
+        bool lassoEnabled = true;
         int Frequency = -1;
         Point freePoint;
         Pen pen;
@@ -76,7 +77,7 @@ namespace IntelligentScissors
                     DrawPath(AnchorPaths[DrawHelpers.unscaledPos(lasso[i])], e);
                 e.Graphics.DrawRectangle(pen, DrawHelpers.getAnchorRect(lasso[i]));
             }
-            if(lasso.Count > 0)
+            if(lasso.Count > 0 && lassoEnabled)
                 DrawLiveWire(e);
         }
 
@@ -122,7 +123,7 @@ namespace IntelligentScissors
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            if (ImageMatrix == null)
+            if (ImageMatrix == null || !lassoEnabled)
                 return;
             if (e.Button == MouseButtons.Left)
                 updateLasso();
@@ -131,7 +132,11 @@ namespace IntelligentScissors
                 if(lasso.Count > 1)
                     lasso.RemoveAt(lasso.Count - 1);
                 else
+                {
                     lasso.Clear();
+                    lassoEnabled = true;
+                }
+                    
             }
             // used to force the picture box to re-draw (aka call pictureBox1_Paint)
             pictureBox1.Invalidate();
@@ -179,8 +184,11 @@ namespace IntelligentScissors
 
         private void updateLasso()
         {
-            lasso.Add(freePoint);
+            Point lastAnchor = freePoint;
+            lasso.Add(lastAnchor);
             updateAnchorPaths();
+            if (lasso.Count > 1 && DrawHelpers.getAnchorRect(lastAnchor).IntersectsWith(DrawHelpers.getAnchorRect(lasso[0])))
+                lassoEnabled = false;
         }
 
         private void updateAnchorPaths()
