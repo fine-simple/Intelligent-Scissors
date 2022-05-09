@@ -28,6 +28,7 @@ namespace IntelligentScissors
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnOpen = new System.Windows.Forms.Button();
             this.btnGaussSmooth = new System.Windows.Forms.Button();
@@ -47,9 +48,9 @@ namespace IntelligentScissors
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.pictureBox1.MinimumSize = new System.Drawing.Size(1168, 451);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(1168, 451);
             this.pictureBox1.TabIndex = 0;
@@ -203,7 +204,10 @@ namespace IntelligentScissors
             this.Controls.Add(this.txtHeight);
             this.Controls.Add(this.btnGaussSmooth);
             this.Controls.Add(this.btnOpen);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "Intelligent Scissors...";
             this.Load += new System.EventHandler(this.MainForm_Load);

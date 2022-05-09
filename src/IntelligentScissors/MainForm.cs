@@ -27,36 +27,31 @@ namespace IntelligentScissors
         private void btnOpen_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                //Open the browsed image and display it
-                string OpenedFilePath = openFileDialog1.FileName;
-                ImageMatrix = ImageOperations.OpenImage(OpenedFilePath);
-                double sigma = 1;
-                int maskSize = 3;
-                //ImageMatrix = ImageOperations.GaussianFilter1D(ImageMatrix, maskSize, sigma);
-                ImageOperations.DisplayImage(ImageMatrix, pictureBox1);
-            }
+            if (openFileDialog1.ShowDialog() != DialogResult.OK)
+                return;
+            //Open the browsed image and display it
+            string OpenedFilePath = openFileDialog1.FileName;
+            ImageMatrix = ImageOperations.OpenImage(OpenedFilePath);
+            double sigma = 1;
+            int maskSize = 3;
+            //ImageMatrix = ImageOperations.GaussianFilter1D(ImageMatrix, maskSize, sigma);
+            ImageOperations.DisplayImage(ImageMatrix, pictureBox1);
+
             txtWidth.Text = ImageOperations.GetWidth(ImageMatrix).ToString();
             txtHeight.Text = ImageOperations.GetHeight(ImageMatrix).ToString();
 
             Graph.Init(ImageMatrix, 4);
 
-            //check if zoom mode vertical scaled or horizontal scaled
-            float imageRatio = pictureBox1.Image.Width / (float)pictureBox1.Image.Height;
-            float boxRatio = pictureBox1.Width / (float)pictureBox1.Height;
-            if (imageRatio >= boxRatio)
+            // set zoom mode if image smaller than container
+            if (pictureBox1.Image.Width > pictureBox1.MinimumSize.Width || pictureBox1.Image.Height > pictureBox1.MinimumSize.Height)
             {
-                DrawHelpers.horizontalScaled = true;
-                DrawHelpers.scaleFactor = pictureBox1.Width / (float)pictureBox1.Image.Width;
-                float scaledSize = pictureBox1.Image.Height * DrawHelpers.scaleFactor;
-                DrawHelpers.filler = Math.Abs(pictureBox1.Height - scaledSize) / 2;
+                pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
+                DrawHelpers.removeScaling();
             }
             else
             {
-                DrawHelpers.scaleFactor = pictureBox1.Height / (float)pictureBox1.Image.Height;
-                float scaledSize = pictureBox1.Image.Width * DrawHelpers.scaleFactor;
-                DrawHelpers.filler = Math.Abs(pictureBox1.Width - scaledSize) / 2;
+                pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+                DrawHelpers.applyScaling(pictureBox1.Image.Width, pictureBox1.Image.Height, pictureBox1.Width, pictureBox1.Height);
             }
         }
         
@@ -140,14 +135,16 @@ namespace IntelligentScissors
             testsBox.Items.Add("Sample3");
             testsBox.Items.Add("Complete1");
             testsBox.Items.Add("Complete2");
-
             testsBox.SelectedIndex = 0;
+
             lasso = new List<Point>();
             AnchorPaths = new Dictionary<Point, List<Point>>();
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
+            if (ImageMatrix == null)
+                return;
             Point p = DrawHelpers.unscaledPos(e.Location);
             txtMousePos.Text = $"{p.X}, {p.Y}";
             // mouse within image boundries

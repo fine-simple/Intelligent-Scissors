@@ -1,15 +1,39 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace IntelligentScissors
 {
     public static class DrawHelpers
     {
-        public static float scaleFactor, filler;
-        public static bool horizontalScaled = false;
+        private static float scaleFactor = 1, filler = 0;
+        private static bool horizontalScaled = false;
         public static Rectangle getAnchorRect(Point mousePos)
         {
             int size = 5;
             return new Rectangle((int)(mousePos.X - 0.5 * size), (int)(mousePos.Y - 0.5 * size), size, size);
+        }
+        public static void applyScaling(int wI, int hI, int wB, int hB)
+        {
+            float imageRatio = wI / (float)hI;
+            float boxRatio = wB / (float)hB;
+            if (imageRatio >= boxRatio)
+            {
+                horizontalScaled = true;
+                scaleFactor = wB / (float)wI;
+                float scaledSize = hI * DrawHelpers.scaleFactor;
+                filler = Math.Abs(hB - scaledSize) / 2;
+            }
+            else
+            {
+                scaleFactor = hB / (float)hI;
+                float scaledSize = wI * DrawHelpers.scaleFactor;
+                filler = Math.Abs(wB - scaledSize) / 2;
+            }
+        }
+        public static void removeScaling()
+        {
+            scaleFactor = 1;
+            filler = 0;
         }
         public static Point unscaledPos(Point p)
         {
