@@ -42,6 +42,7 @@ namespace IntelligentScissors
             this.freqTextBox = new System.Windows.Forms.TextBox();
             this.freqLabel = new System.Windows.Forms.Label();
             this.testsBox = new System.Windows.Forms.ComboBox();
+            this.loadingLbl = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -133,7 +134,7 @@ namespace IntelligentScissors
             this.panel1.AutoScrollMinSize = new System.Drawing.Size(1, 1);
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel1.Controls.Add(this.pictureBox1);
-            this.panel1.Location = new System.Drawing.Point(16, 15);
+            this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1172, 455);
@@ -187,6 +188,17 @@ namespace IntelligentScissors
             this.testsBox.Size = new System.Drawing.Size(164, 24);
             this.testsBox.TabIndex = 21;
             // 
+            // loadingLbl
+            // 
+            this.loadingLbl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.loadingLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
+            this.loadingLbl.Location = new System.Drawing.Point(0, 0);
+            this.loadingLbl.Name = "loadingLbl";
+            this.loadingLbl.Size = new System.Drawing.Size(1205, 616);
+            this.loadingLbl.TabIndex = 22;
+            this.loadingLbl.Text = "Loading...";
+            this.loadingLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -197,13 +209,14 @@ namespace IntelligentScissors
             this.Controls.Add(this.freqTextBox);
             this.Controls.Add(this.txtMousePos);
             this.Controls.Add(this.mousePos);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.txtWidth);
             this.Controls.Add(this.txtHeight);
             this.Controls.Add(this.btnGaussSmooth);
             this.Controls.Add(this.btnOpen);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.loadingLbl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -233,6 +246,7 @@ namespace IntelligentScissors
         private System.Windows.Forms.TextBox freqTextBox;
         private System.Windows.Forms.Label freqLabel;
         private System.Windows.Forms.ComboBox testsBox;
+        private System.Windows.Forms.Label loadingLbl;
     }
 }
 

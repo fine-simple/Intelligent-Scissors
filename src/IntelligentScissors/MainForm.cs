@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace IntelligentScissors
@@ -23,7 +24,13 @@ namespace IntelligentScissors
         {
             InitializeComponent();
         }
-
+        private void initGraph()
+        {
+            Graph.Init(ImageMatrix, 4);
+            Invoke(new Action(() => {
+                panel1.Show();
+            }));
+        }
         private void btnOpen_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
@@ -40,8 +47,6 @@ namespace IntelligentScissors
             txtWidth.Text = ImageOperations.GetWidth(ImageMatrix).ToString();
             txtHeight.Text = ImageOperations.GetHeight(ImageMatrix).ToString();
 
-            Graph.Init(ImageMatrix, 4);
-
             // set zoom mode if image smaller than container
             if (pictureBox1.Image.Width > pictureBox1.MinimumSize.Width || pictureBox1.Image.Height > pictureBox1.MinimumSize.Height)
             {
@@ -53,6 +58,11 @@ namespace IntelligentScissors
                 pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
                 DrawHelpers.applyScaling(pictureBox1.Image.Width, pictureBox1.Image.Height, pictureBox1.Width, pictureBox1.Height);
             }
+
+            // Construct Graph
+            panel1.Hide();
+            Thread graphConstructThread = new Thread(initGraph);
+            graphConstructThread.Start();
         }
         
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -112,7 +122,7 @@ namespace IntelligentScissors
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            if (ImageMatrix == null) // first click on picture
+            if (ImageMatrix == null)
                 return;
             if (e.Button == MouseButtons.Left)
                 updateLasso();
