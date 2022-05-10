@@ -63,6 +63,7 @@ namespace IntelligentScissors
             // Construct Graph
             panel1.Hide();
             Thread graphConstructThread = new Thread(initGraph);
+            graphConstructThread.IsBackground = true;
             graphConstructThread.Start();
         }
         

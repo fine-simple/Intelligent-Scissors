@@ -51,9 +51,9 @@ namespace IntelligentScissors
             // 
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.pictureBox1.MinimumSize = new System.Drawing.Size(1168, 451);
+            this.pictureBox1.MinimumSize = new System.Drawing.Size(1200, 450);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1168, 451);
+            this.pictureBox1.Size = new System.Drawing.Size(1200, 450);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
@@ -137,7 +137,7 @@ namespace IntelligentScissors
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1172, 455);
+            this.panel1.Size = new System.Drawing.Size(1205, 455);
             this.panel1.TabIndex = 15;
             // 
             // mousePos
