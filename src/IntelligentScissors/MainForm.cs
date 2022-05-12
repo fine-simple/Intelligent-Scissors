@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -207,29 +208,31 @@ namespace IntelligentScissors
 
         private void cropBtn_Click(object sender, EventArgs e)
         {
-            int left = pictureBox1.Image.Width, right = 0, top = pictureBox1.Height, bottom = 0;
-            foreach (var anchor in AnchorPaths)
-            {
-                foreach (var point in anchor.Value)
+            // Add all points in one list
+            List<Point> points = new List<Point>(AnchorPaths.Values.Count);
+            for (int i=1; i < lasso.Count; i++) {
+                Point unscaled = DrawHelpers.unscaledPos(lasso[i]);
+                foreach (var point in AnchorPaths[unscaled])
                 {
-                    Point p = DrawHelpers.unscaledPos(point);
-                    if (p.X > right)
-                        right = p.X;
-                    if (p.X < left)
-                        left = p.X;
-                    if (p.Y > bottom)
-                        bottom = p.Y;
-                    if (p.Y < top)
-                        top = p.Y;
+                    points.Add(DrawHelpers.unscaledPos(point));
                 }
             }
-            Rectangle cropRect = new Rectangle(left, top, right - left, bottom - top);
-            Bitmap cropped = new Bitmap(cropRect.Width, cropRect.Height);
-            
-            using(Graphics g = Graphics.FromImage(cropped))
+            Image cropped;
+            using (GraphicsPath path = new GraphicsPath())
             {
-                g.DrawImage(pictureBox1.Image, new Rectangle(0, 0, cropped.Width, cropped.Height), 
-                            cropRect, GraphicsUnit.Pixel);
+                path.AddPolygon(points.ToArray());
+                RectangleF cropRect = path.GetBounds();
+                Image mask = new Bitmap(pictureBox1.Image.Width, pictureBox1.Image.Height);
+                using(Graphics g = Graphics.FromImage(mask))
+                {
+                    g.SetClip(new Region(path), CombineMode.Replace);
+                    g.DrawImage(pictureBox1.Image, 0, 0);
+                }
+                cropped = new Bitmap((int)cropRect.Width, (int)cropRect.Height);
+                using (Graphics g = Graphics.FromImage(cropped))
+                {
+                    g.DrawImage(mask, new RectangleF(0, 0, cropRect.Width, cropRect.Height), cropRect, GraphicsUnit.Pixel);
+                }
             }
             CroppedPreviewForm croppedPreview = new CroppedPreviewForm(cropped);
             croppedPreview.ShowDialog();

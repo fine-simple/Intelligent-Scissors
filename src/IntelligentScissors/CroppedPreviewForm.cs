@@ -11,8 +11,8 @@ namespace IntelligentScissors
 {
     public partial class CroppedPreviewForm : Form
     {
-        Bitmap cropped;
-        public CroppedPreviewForm(Bitmap cropped)
+        Image cropped;
+        public CroppedPreviewForm(Image cropped)
         {
             InitializeComponent();
             this.cropped = cropped;
