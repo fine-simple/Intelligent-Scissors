@@ -16,10 +16,9 @@ namespace IntelligentScissors
         int Frequency = -1;
         Point freePoint;
         Pen pen;
-        public static List<Point> lasso;
         RGBPixel[,] ImageMatrix;
-        // Shortest Path between each Anchor and the one before it (starts from second anchor)
-        public static Dictionary<Point, List<Point>> AnchorPaths;
+        public static Dictionary<Point, List<Point>> AnchorPaths;// Shortest Path between each Anchor and the one before it (starts from second anchor)
+        public static List<Point> lasso;
 
         public MainForm()
         {

@@ -11,10 +11,10 @@ namespace IntelligentScissors
         private static HashSet<KeyValuePair<int, int> > getFullPath(List<Point> lasso, Dictionary<Point, List<Point>> AnchorPaths)
         {
             HashSet<KeyValuePair<int, int> > onPath = new HashSet<KeyValuePair<int, int> >();
-            AnchorPaths[lasso[lasso.Count - 1]] = ShortestPathHelpers.GetShortestPath(lasso[lasso.Count - 1], lasso[0], Graph.adj);
+            AnchorPaths[lasso[0]] = ShortestPathHelpers.GetShortestPath(lasso[lasso.Count - 1], lasso[0], Graph.adj);
             foreach (KeyValuePair<Point, List<Point>> anchor in AnchorPaths)
             {
-                foreach (Point pathPoint in anchor.Value)// paths are from src to dest (anchor to anchor) so no need to add key to dictionary
+                foreach (Point pathPoint in anchor.Value)
                 {
                     onPath.Add(new KeyValuePair<int, int>(pathPoint.X, pathPoint.Y));
                 }
@@ -22,7 +22,7 @@ namespace IntelligentScissors
 
             return onPath;
         }
-        public static KeyValuePair<int, int>[] getBoundaries(Dictionary<Point, List<Point>> AnchorPaths)
+        private static KeyValuePair<int, int>[] getBoundaries(Dictionary<Point, List<Point>> AnchorPaths)
         {
             int yMin = int.MaxValue;
             int yMax = -1;
@@ -47,13 +47,10 @@ namespace IntelligentScissors
 
             return boundaries;
         }
-        private static HashSet<KeyValuePair<int, int>> BFS(KeyValuePair<int, int> start, HashSet<KeyValuePair<int, int>> onPath, KeyValuePair<int, int>[] boundaries)
+        private static HashSet<KeyValuePair<int, int>> BFS(KeyValuePair<int, int> start, HashSet<KeyValuePair<int, int>> onPath)
         {
-            // pixel x is adjacent to pixel y if x is NOT on the lasso path
-            // this way, all visited nodes are outside the cropped shape
-            /*
-             * FIXME: currently only draws path
-             */
+            // TODO: do BFS Only on the object's boundaries
+
             Queue<KeyValuePair<int, int>> queue = new Queue<KeyValuePair<int, int>>();
             HashSet<KeyValuePair<int, int>> visited = new HashSet<KeyValuePair<int, int>>();
 
@@ -108,9 +105,11 @@ namespace IntelligentScissors
         }
         public static Bitmap CropImage(Bitmap bmp, List<Point> lasso, Dictionary<Point, List<Point>> AnchorPaths)
         {
+            /*
+             * FIXME: Currently doesn't work with scaled images
+             */
             HashSet<KeyValuePair<int, int>> lassoPath = getFullPath(lasso, AnchorPaths);
-            KeyValuePair<int, int>[] boundaries = getBoundaries(AnchorPaths);
-            HashSet<KeyValuePair<int, int>> background = BFS(new KeyValuePair<int, int>(0, 0), lassoPath, boundaries);
+            HashSet<KeyValuePair<int, int>> background = BFS(new KeyValuePair<int, int>(0, 0), lassoPath);
             Bitmap finalImage = getTransparentBackground(bmp, background);
 
             return finalImage;
