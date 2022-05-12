@@ -43,6 +43,7 @@ namespace IntelligentScissors
             this.freqLabel = new System.Windows.Forms.Label();
             this.testsBox = new System.Windows.Forms.ComboBox();
             this.loadingLbl = new System.Windows.Forms.Label();
+            this.cropBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -63,7 +64,7 @@ namespace IntelligentScissors
             // btnOpen
             // 
             this.btnOpen.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOpen.Location = new System.Drawing.Point(333, 496);
+            this.btnOpen.Location = new System.Drawing.Point(407, 496);
             this.btnOpen.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.Size = new System.Drawing.Size(185, 77);
@@ -75,7 +76,7 @@ namespace IntelligentScissors
             // btnGaussSmooth
             // 
             this.btnGaussSmooth.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGaussSmooth.Location = new System.Drawing.Point(675, 496);
+            this.btnGaussSmooth.Location = new System.Drawing.Point(999, 512);
             this.btnGaussSmooth.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnGaussSmooth.Name = "btnGaussSmooth";
             this.btnGaussSmooth.Size = new System.Drawing.Size(194, 77);
@@ -109,6 +110,7 @@ namespace IntelligentScissors
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.CausesValidation = false;
             this.label5.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(14, 480);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
@@ -120,6 +122,7 @@ namespace IntelligentScissors
             // label6
             // 
             this.label6.AutoSize = true;
+            this.label6.CausesValidation = false;
             this.label6.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(12, 527);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
@@ -143,6 +146,7 @@ namespace IntelligentScissors
             // mousePos
             // 
             this.mousePos.AutoSize = true;
+            this.mousePos.CausesValidation = false;
             this.mousePos.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
             this.mousePos.Location = new System.Drawing.Point(16, 555);
             this.mousePos.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
@@ -164,7 +168,7 @@ namespace IntelligentScissors
             // 
             // freqTextBox
             // 
-            this.freqTextBox.Location = new System.Drawing.Point(1097, 517);
+            this.freqTextBox.Location = new System.Drawing.Point(216, 533);
             this.freqTextBox.Name = "freqTextBox";
             this.freqTextBox.Size = new System.Drawing.Size(89, 22);
             this.freqTextBox.TabIndex = 19;
@@ -173,8 +177,9 @@ namespace IntelligentScissors
             // freqLabel
             // 
             this.freqLabel.AutoSize = true;
+            this.freqLabel.CausesValidation = false;
             this.freqLabel.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.freqLabel.Location = new System.Drawing.Point(1095, 496);
+            this.freqLabel.Location = new System.Drawing.Point(219, 512);
             this.freqLabel.Name = "freqLabel";
             this.freqLabel.Size = new System.Drawing.Size(86, 18);
             this.freqLabel.TabIndex = 20;
@@ -182,14 +187,16 @@ namespace IntelligentScissors
             // 
             // testsBox
             // 
+            this.testsBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.testsBox.FormattingEnabled = true;
-            this.testsBox.Location = new System.Drawing.Point(899, 496);
+            this.testsBox.Location = new System.Drawing.Point(999, 480);
             this.testsBox.Name = "testsBox";
-            this.testsBox.Size = new System.Drawing.Size(164, 24);
+            this.testsBox.Size = new System.Drawing.Size(194, 24);
             this.testsBox.TabIndex = 21;
             // 
             // loadingLbl
             // 
+            this.loadingLbl.CausesValidation = false;
             this.loadingLbl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.loadingLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
             this.loadingLbl.Location = new System.Drawing.Point(0, 0);
@@ -199,11 +206,25 @@ namespace IntelligentScissors
             this.loadingLbl.Text = "Loading...";
             this.loadingLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // cropBtn
+            // 
+            this.cropBtn.Enabled = false;
+            this.cropBtn.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cropBtn.Location = new System.Drawing.Point(681, 496);
+            this.cropBtn.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.cropBtn.Name = "cropBtn";
+            this.cropBtn.Size = new System.Drawing.Size(185, 77);
+            this.cropBtn.TabIndex = 23;
+            this.cropBtn.Text = "Crop";
+            this.cropBtn.UseVisualStyleBackColor = true;
+            this.cropBtn.Click += new System.EventHandler(this.cropBtn_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1205, 616);
+            this.Controls.Add(this.cropBtn);
             this.Controls.Add(this.testsBox);
             this.Controls.Add(this.freqLabel);
             this.Controls.Add(this.freqTextBox);
@@ -247,6 +268,7 @@ namespace IntelligentScissors
         private System.Windows.Forms.Label freqLabel;
         private System.Windows.Forms.ComboBox testsBox;
         private System.Windows.Forms.Label loadingLbl;
+        private System.Windows.Forms.Button cropBtn;
     }
 }
 

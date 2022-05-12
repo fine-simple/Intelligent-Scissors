@@ -15,7 +15,7 @@ namespace IntelligentScissors
         bool lassoEnabled = true;
         int Frequency = -1;
         Point freePoint;
-        Pen pen;
+        Pen drawPen, finalPen;
         List<Point> lasso;
         RGBPixel[,] ImageMatrix;
         // Shortest Path between each Anchor and the one before it (starts from second anchor)
@@ -63,7 +63,6 @@ namespace IntelligentScissors
             // Construct Graph
             panel1.Hide();
             Thread graphConstructThread = new Thread(initGraph);
-            graphConstructThread.IsBackground = true;
             graphConstructThread.Start();
         }
         
@@ -76,7 +75,8 @@ namespace IntelligentScissors
             {
                 if (AnchorPaths.ContainsKey(DrawHelpers.unscaledPos(lasso[i])))
                     DrawPath(AnchorPaths[DrawHelpers.unscaledPos(lasso[i])], e);
-                e.Graphics.DrawRectangle(pen, DrawHelpers.getAnchorRect(lasso[i]));
+                if (lassoEnabled)
+                    e.Graphics.DrawRectangle(drawPen, DrawHelpers.getAnchorRect(lasso[i]));
             }
             if(lasso.Count > 0 && lassoEnabled)
                 DrawLiveWire(e);
@@ -92,6 +92,7 @@ namespace IntelligentScissors
         }
         private void DrawPath(List<Point>path, PaintEventArgs e)
         {
+            Pen pen = lassoEnabled ? drawPen : finalPen;
             for (int i = 1; i < path.Count; i++)
             {
                 e.Graphics.DrawLine(pen, path[i - 1], path[i]);
@@ -119,9 +120,18 @@ namespace IntelligentScissors
                     break;
 
             }
-            
-        }
 
+        }
+        private void enableLasso()
+        {
+            lassoEnabled = true;
+            cropBtn.Enabled = false;
+        }
+        private void disableLasso()
+        {
+            lassoEnabled = false;
+            cropBtn.Enabled = true;
+        }
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             if (ImageMatrix == null)
@@ -129,7 +139,7 @@ namespace IntelligentScissors
 
             if (e.Button == MouseButtons.Right)
             {
-                lassoEnabled = true;
+                enableLasso();
 
                 if(lasso.Count > 1)
                     lasso.RemoveAt(lasso.Count - 1);
@@ -147,7 +157,8 @@ namespace IntelligentScissors
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            pen = new Pen(Color.FromArgb(255, 255, 0, 0));
+            drawPen = new Pen(Color.FromArgb(255, 255, 0, 0));
+            finalPen = new Pen(Color.FromArgb(255, 0, 255, 0));
             testsBox.Items.Add("Sample1");
             testsBox.Items.Add("Sample2");
             testsBox.Items.Add("Sample3");
@@ -191,7 +202,37 @@ namespace IntelligentScissors
             lasso.Add(lastAnchor);
             updateAnchorPaths();
             if (lasso.Count > 1 && DrawHelpers.getAnchorRect(lastAnchor).IntersectsWith(DrawHelpers.getAnchorRect(lasso[0])))
-                lassoEnabled = false;
+                disableLasso();
+        }
+
+        private void cropBtn_Click(object sender, EventArgs e)
+        {
+            int left = pictureBox1.Image.Width, right = 0, top = pictureBox1.Height, bottom = 0;
+            foreach (var anchor in AnchorPaths)
+            {
+                foreach (var point in anchor.Value)
+                {
+                    Point p = DrawHelpers.unscaledPos(point);
+                    if (p.X > right)
+                        right = p.X;
+                    if (p.X < left)
+                        left = p.X;
+                    if (p.Y > bottom)
+                        bottom = p.Y;
+                    if (p.Y < top)
+                        top = p.Y;
+                }
+            }
+            Rectangle cropRect = new Rectangle(left, top, right - left, bottom - top);
+            Bitmap cropped = new Bitmap(cropRect.Width, cropRect.Height);
+            
+            using(Graphics g = Graphics.FromImage(cropped))
+            {
+                g.DrawImage(pictureBox1.Image, new Rectangle(0, 0, cropped.Width, cropped.Height), 
+                            cropRect, GraphicsUnit.Pixel);
+            }
+            CroppedPreviewForm croppedPreview = new CroppedPreviewForm(cropped);
+            croppedPreview.ShowDialog();
         }
 
         private void updateAnchorPaths()
