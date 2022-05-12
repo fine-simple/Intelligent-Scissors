@@ -37,6 +37,7 @@
             this.pictureBox1.Location = new System.Drawing.Point(6, 3);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(1296, 616);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
@@ -48,10 +49,11 @@
             this.ClientSize = new System.Drawing.Size(1302, 631);
             this.Controls.Add(this.pictureBox1);
             this.Name = "CroppedImageForm";
-            this.Text = "Form1";
+            this.Text = "Intelligent Scissors";
             this.Load += new System.EventHandler(this.CroppedImageForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
