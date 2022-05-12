@@ -43,6 +43,7 @@ namespace IntelligentScissors
             this.freqLabel = new System.Windows.Forms.Label();
             this.testsBox = new System.Windows.Forms.ComboBox();
             this.loadingLbl = new System.Windows.Forms.Label();
+            this.cropBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -50,10 +51,10 @@ namespace IntelligentScissors
             // pictureBox1
             // 
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.pictureBox1.MinimumSize = new System.Drawing.Size(1200, 450);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox1.MinimumSize = new System.Drawing.Size(1350, 534);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1200, 450);
+            this.pictureBox1.Size = new System.Drawing.Size(1350, 534);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
@@ -63,10 +64,10 @@ namespace IntelligentScissors
             // btnOpen
             // 
             this.btnOpen.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOpen.Location = new System.Drawing.Point(333, 496);
-            this.btnOpen.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnOpen.Location = new System.Drawing.Point(363, 590);
+            this.btnOpen.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnOpen.Name = "btnOpen";
-            this.btnOpen.Size = new System.Drawing.Size(185, 77);
+            this.btnOpen.Size = new System.Drawing.Size(208, 91);
             this.btnOpen.TabIndex = 2;
             this.btnOpen.Text = "Open Image";
             this.btnOpen.UseVisualStyleBackColor = true;
@@ -75,10 +76,10 @@ namespace IntelligentScissors
             // btnGaussSmooth
             // 
             this.btnGaussSmooth.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGaussSmooth.Location = new System.Drawing.Point(675, 496);
-            this.btnGaussSmooth.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnGaussSmooth.Location = new System.Drawing.Point(1124, 624);
+            this.btnGaussSmooth.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnGaussSmooth.Name = "btnGaussSmooth";
-            this.btnGaussSmooth.Size = new System.Drawing.Size(194, 77);
+            this.btnGaussSmooth.Size = new System.Drawing.Size(184, 57);
             this.btnGaussSmooth.TabIndex = 5;
             this.btnGaussSmooth.Text = "Perform Test";
             this.btnGaussSmooth.UseVisualStyleBackColor = true;
@@ -87,22 +88,22 @@ namespace IntelligentScissors
             // txtHeight
             // 
             this.txtHeight.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtHeight.Location = new System.Drawing.Point(88, 523);
-            this.txtHeight.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.txtHeight.Location = new System.Drawing.Point(99, 621);
+            this.txtHeight.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtHeight.Name = "txtHeight";
             this.txtHeight.ReadOnly = true;
-            this.txtHeight.Size = new System.Drawing.Size(75, 27);
+            this.txtHeight.Size = new System.Drawing.Size(84, 31);
             this.txtHeight.TabIndex = 8;
             this.txtHeight.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // txtWidth
             // 
             this.txtWidth.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtWidth.Location = new System.Drawing.Point(88, 477);
-            this.txtWidth.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.txtWidth.Location = new System.Drawing.Point(99, 566);
+            this.txtWidth.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtWidth.Name = "txtWidth";
             this.txtWidth.ReadOnly = true;
-            this.txtWidth.Size = new System.Drawing.Size(75, 27);
+            this.txtWidth.Size = new System.Drawing.Size(84, 31);
             this.txtWidth.TabIndex = 11;
             this.txtWidth.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -110,10 +111,10 @@ namespace IntelligentScissors
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(14, 480);
+            this.label5.Location = new System.Drawing.Point(16, 570);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(61, 21);
+            this.label5.Size = new System.Drawing.Size(71, 24);
             this.label5.TabIndex = 12;
             this.label5.Text = "Width";
             // 
@@ -121,10 +122,10 @@ namespace IntelligentScissors
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(12, 527);
+            this.label6.Location = new System.Drawing.Point(14, 626);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(67, 21);
+            this.label6.Size = new System.Drawing.Size(77, 24);
             this.label6.TabIndex = 13;
             this.label6.Text = "Height";
             // 
@@ -135,38 +136,39 @@ namespace IntelligentScissors
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1205, 455);
+            this.panel1.Size = new System.Drawing.Size(1355, 540);
             this.panel1.TabIndex = 15;
             // 
             // mousePos
             // 
             this.mousePos.AutoSize = true;
             this.mousePos.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
-            this.mousePos.Location = new System.Drawing.Point(16, 555);
+            this.mousePos.Location = new System.Drawing.Point(18, 659);
             this.mousePos.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.mousePos.Name = "mousePos";
-            this.mousePos.Size = new System.Drawing.Size(141, 21);
+            this.mousePos.Size = new System.Drawing.Size(161, 24);
             this.mousePos.TabIndex = 17;
             this.mousePos.Text = "Mouse Position";
             // 
             // txtMousePos
             // 
             this.txtMousePos.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMousePos.Location = new System.Drawing.Point(16, 579);
-            this.txtMousePos.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.txtMousePos.Location = new System.Drawing.Point(18, 688);
+            this.txtMousePos.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtMousePos.Name = "txtMousePos";
             this.txtMousePos.ReadOnly = true;
-            this.txtMousePos.Size = new System.Drawing.Size(135, 27);
+            this.txtMousePos.Size = new System.Drawing.Size(151, 31);
             this.txtMousePos.TabIndex = 18;
             this.txtMousePos.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // freqTextBox
             // 
-            this.freqTextBox.Location = new System.Drawing.Point(1097, 517);
+            this.freqTextBox.Location = new System.Drawing.Point(963, 621);
+            this.freqTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.freqTextBox.Name = "freqTextBox";
-            this.freqTextBox.Size = new System.Drawing.Size(89, 22);
+            this.freqTextBox.Size = new System.Drawing.Size(101, 27);
             this.freqTextBox.TabIndex = 19;
             this.freqTextBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
@@ -174,18 +176,19 @@ namespace IntelligentScissors
             // 
             this.freqLabel.AutoSize = true;
             this.freqLabel.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.freqLabel.Location = new System.Drawing.Point(1095, 496);
+            this.freqLabel.Location = new System.Drawing.Point(959, 590);
             this.freqLabel.Name = "freqLabel";
-            this.freqLabel.Size = new System.Drawing.Size(86, 18);
+            this.freqLabel.Size = new System.Drawing.Size(105, 22);
             this.freqLabel.TabIndex = 20;
             this.freqLabel.Text = "Frequency";
             // 
             // testsBox
             // 
             this.testsBox.FormattingEnabled = true;
-            this.testsBox.Location = new System.Drawing.Point(899, 496);
+            this.testsBox.Location = new System.Drawing.Point(1124, 590);
+            this.testsBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.testsBox.Name = "testsBox";
-            this.testsBox.Size = new System.Drawing.Size(164, 24);
+            this.testsBox.Size = new System.Drawing.Size(184, 27);
             this.testsBox.TabIndex = 21;
             // 
             // loadingLbl
@@ -194,16 +197,28 @@ namespace IntelligentScissors
             this.loadingLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
             this.loadingLbl.Location = new System.Drawing.Point(0, 0);
             this.loadingLbl.Name = "loadingLbl";
-            this.loadingLbl.Size = new System.Drawing.Size(1205, 616);
+            this.loadingLbl.Size = new System.Drawing.Size(1356, 732);
             this.loadingLbl.TabIndex = 22;
             this.loadingLbl.Text = "Loading...";
             this.loadingLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // cropBtn
+            // 
+            this.cropBtn.Font = new System.Drawing.Font("Tahoma", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cropBtn.Location = new System.Drawing.Point(674, 590);
+            this.cropBtn.Name = "cropBtn";
+            this.cropBtn.Size = new System.Drawing.Size(208, 91);
+            this.cropBtn.TabIndex = 23;
+            this.cropBtn.Text = "Crop";
+            this.cropBtn.UseVisualStyleBackColor = true;
+            this.cropBtn.Click += new System.EventHandler(this.cropBtn_Click);
+            // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1205, 616);
+            this.ClientSize = new System.Drawing.Size(1356, 732);
+            this.Controls.Add(this.cropBtn);
             this.Controls.Add(this.testsBox);
             this.Controls.Add(this.freqLabel);
             this.Controls.Add(this.freqTextBox);
@@ -219,7 +234,7 @@ namespace IntelligentScissors
             this.Controls.Add(this.loadingLbl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "Intelligent Scissors...";
@@ -247,6 +262,7 @@ namespace IntelligentScissors
         private System.Windows.Forms.Label freqLabel;
         private System.Windows.Forms.ComboBox testsBox;
         private System.Windows.Forms.Label loadingLbl;
+        private System.Windows.Forms.Button cropBtn;
     }
 }
 

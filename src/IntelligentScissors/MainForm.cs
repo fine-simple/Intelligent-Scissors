@@ -16,10 +16,10 @@ namespace IntelligentScissors
         int Frequency = -1;
         Point freePoint;
         Pen pen;
-        List<Point> lasso;
+        public static List<Point> lasso;
         RGBPixel[,] ImageMatrix;
         // Shortest Path between each Anchor and the one before it (starts from second anchor)
-        Dictionary<Point, List<Point>> AnchorPaths;
+        public static Dictionary<Point, List<Point>> AnchorPaths;
 
         public MainForm()
         {
@@ -40,9 +40,9 @@ namespace IntelligentScissors
             //Open the browsed image and display it
             string OpenedFilePath = openFileDialog1.FileName;
             ImageMatrix = ImageOperations.OpenImage(OpenedFilePath);
-            double sigma = 1;
+/*          double sigma = 1;
             int maskSize = 3;
-            //ImageMatrix = ImageOperations.GaussianFilter1D(ImageMatrix, maskSize, sigma);
+            ImageMatrix = ImageOperations.GaussianFilter1D(ImageMatrix, maskSize, sigma);*/
             ImageOperations.DisplayImage(ImageMatrix, pictureBox1);
 
             txtWidth.Text = ImageOperations.GetWidth(ImageMatrix).ToString();
@@ -202,6 +202,13 @@ namespace IntelligentScissors
             Point destAnchor = DrawHelpers.unscaledPos(lasso[lasso.Count - 1]);
 
             AnchorPaths[destAnchor] = ShortestPathHelpers.GetShortestPath(srcAnchor, destAnchor, Graph.adj);
+        }
+
+        private void cropBtn_Click(object sender, EventArgs e)
+        {
+            CroppedImageForm croppedImageForm = new CroppedImageForm();
+            croppedImageForm.setImage(pictureBox1.Image);
+            croppedImageForm.ShowDialog();
         }
     }
 }
