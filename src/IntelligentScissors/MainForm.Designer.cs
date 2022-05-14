@@ -44,8 +44,11 @@ namespace IntelligentScissors
             this.testsBox = new System.Windows.Forms.ComboBox();
             this.loadingLbl = new System.Windows.Forms.Label();
             this.cropBtn = new System.Windows.Forms.Button();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.graphInfoLbl = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -201,7 +204,7 @@ namespace IntelligentScissors
             this.loadingLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Millimeter, ((byte)(0)));
             this.loadingLbl.Location = new System.Drawing.Point(0, 0);
             this.loadingLbl.Name = "loadingLbl";
-            this.loadingLbl.Size = new System.Drawing.Size(1205, 616);
+            this.loadingLbl.Size = new System.Drawing.Size(1215, 640);
             this.loadingLbl.TabIndex = 22;
             this.loadingLbl.Text = "Loading...";
             this.loadingLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -219,11 +222,28 @@ namespace IntelligentScissors
             this.cropBtn.UseVisualStyleBackColor = true;
             this.cropBtn.Click += new System.EventHandler(this.cropBtn_Click);
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.graphInfoLbl});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 616);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1215, 24);
+            this.statusStrip1.TabIndex = 24;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // graphInfoLbl
+            // 
+            this.graphInfoLbl.Name = "graphInfoLbl";
+            this.graphInfoLbl.Size = new System.Drawing.Size(0, 18);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1205, 616);
+            this.ClientSize = new System.Drawing.Size(1215, 640);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.cropBtn);
             this.Controls.Add(this.testsBox);
             this.Controls.Add(this.freqLabel);
@@ -247,6 +267,8 @@ namespace IntelligentScissors
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel1.ResumeLayout(false);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -269,6 +291,8 @@ namespace IntelligentScissors
         private System.Windows.Forms.ComboBox testsBox;
         private System.Windows.Forms.Label loadingLbl;
         private System.Windows.Forms.Button cropBtn;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel graphInfoLbl;
     }
 }
 

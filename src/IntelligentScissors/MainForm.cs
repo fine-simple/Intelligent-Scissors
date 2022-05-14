@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Text;
@@ -12,6 +13,7 @@ namespace IntelligentScissors
 {
     public partial class MainForm : Form
     {
+        Stopwatch sw;
         bool FreqEnabled = false;
         bool lassoEnabled = true;
         int Frequency = -1;
@@ -28,9 +30,13 @@ namespace IntelligentScissors
         }
         private void initGraph()
         {
+            sw = new Stopwatch();
+            sw.Start();
             Graph.Init(ImageMatrix, 4);
+            sw.Stop();
             Invoke(new Action(() => {
                 panel1.Show();
+                graphInfoLbl.Text = $"Graph Constructed in {(sw.ElapsedMilliseconds / 1000.0).ToString()} seconds";
             }));
         }
         private void btnOpen_Click(object sender, EventArgs e)
