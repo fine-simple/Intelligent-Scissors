@@ -61,6 +61,7 @@ namespace IntelligentScissors
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
+            this.pictureBox1.DoubleClick += new System.EventHandler(this.pictureBox1_DoubleClick);
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
             this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
             // 
@@ -227,16 +228,16 @@ namespace IntelligentScissors
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.graphInfoLbl});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 616);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 618);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1215, 24);
+            this.statusStrip1.Size = new System.Drawing.Size(1215, 22);
             this.statusStrip1.TabIndex = 24;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // graphInfoLbl
             // 
             this.graphInfoLbl.Name = "graphInfoLbl";
-            this.graphInfoLbl.Size = new System.Drawing.Size(0, 18);
+            this.graphInfoLbl.Size = new System.Drawing.Size(0, 16);
             // 
             // MainForm
             // 

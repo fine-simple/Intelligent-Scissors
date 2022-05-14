@@ -19,10 +19,10 @@ namespace IntelligentScissors
         int Frequency = -1;
         Point freePoint;
         Pen drawPen, finalPen;
-        List<Point> lasso;
         RGBPixel[,] ImageMatrix;
         // Shortest Path between each Anchor and the one before it (starts from second anchor)
-        Dictionary<Point, List<Point>> AnchorPaths;
+        LinkedList<KeyValuePair<Point, List<Point>>> lasso;
+        HashSet<Point> anchors;
 
         public MainForm()
         {
@@ -78,12 +78,11 @@ namespace IntelligentScissors
             if (ImageMatrix == null)
                 return;
 
-            for (int i = 0; i < lasso.Count; i++)
+            foreach(var anchor in lasso)
             {
-                if (AnchorPaths.ContainsKey(DrawHelpers.unscaledPos(lasso[i])))
-                    DrawPath(AnchorPaths[DrawHelpers.unscaledPos(lasso[i])], e);
+                DrawPath(anchor.Value, e);
                 if (lassoEnabled)
-                    e.Graphics.DrawRectangle(drawPen, DrawHelpers.getAnchorRect(lasso[i]));
+                    e.Graphics.DrawRectangle(drawPen, DrawHelpers.getAnchorRect(DrawHelpers.scaledPos(anchor.Key)));
             }
             if(lasso.Count > 0 && lassoEnabled)
                 DrawLiveWire(e);
@@ -91,9 +90,8 @@ namespace IntelligentScissors
 
         private void DrawLiveWire(PaintEventArgs pe)
         {
-            Point p = DrawHelpers.unscaledPos(freePoint);
-            List<Point> LiveWire = ShortestPathHelpers.GetShortestPath(DrawHelpers.unscaledPos(lasso[lasso.Count - 1]), p, Graph.adj);
-            if (FreqEnabled && LiveWire.Count >= Frequency && Graph.validIndex(p.Y, p.X))
+            List<Point> LiveWire = ShortestPathHelpers.GetShortestPath(lasso.Last.Value.Key, freePoint, Graph.adj);
+            if (FreqEnabled && LiveWire.Count >= Frequency && Graph.validIndex(freePoint.Y, freePoint.X))
                 updateLasso();
             DrawPath(LiveWire, pe);
         }
@@ -102,7 +100,7 @@ namespace IntelligentScissors
             Pen pen = lassoEnabled ? drawPen : finalPen;
             for (int i = 1; i < path.Count; i++)
             {
-                e.Graphics.DrawLine(pen, path[i - 1], path[i]);
+                e.Graphics.DrawLine(pen, DrawHelpers.scaledPos(path[i - 1]), DrawHelpers.scaledPos(path[i]));
             }
         }
         private void btnGaussSmooth_Click(object sender, EventArgs e)
@@ -147,36 +145,24 @@ namespace IntelligentScissors
             if (e.Button == MouseButtons.Right)
             {
                 enableLasso();
-
-                if(lasso.Count > 1)
-                    lasso.RemoveAt(lasso.Count - 1);
+                if (lasso.Count > 1)
+                {
+                    anchors.Remove(lasso.Last.Value.Key);
+                    lasso.RemoveLast();
+                    lasso.Last.Value.Value.Clear();
+                }
                 else
+                {
                     lasso.Clear();
+                    anchors.Clear();
+                }
             }
-            if (!lassoEnabled)
-                return;
-            else if (e.Button == MouseButtons.Left)
+            else if (lassoEnabled && e.Button == MouseButtons.Left)
                 updateLasso();
 
             // used to force the picture box to re-draw (aka call pictureBox1_Paint)
             pictureBox1.Invalidate();
         }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            drawPen = new Pen(Color.FromArgb(255, 255, 0, 0));
-            finalPen = new Pen(Color.FromArgb(255, 0, 255, 0));
-            testsBox.Items.Add("Sample1");
-            testsBox.Items.Add("Sample2");
-            testsBox.Items.Add("Sample3");
-            testsBox.Items.Add("Complete1");
-            testsBox.Items.Add("Complete2");
-            testsBox.SelectedIndex = 0;
-
-            lasso = new List<Point>();
-            AnchorPaths = new Dictionary<Point, List<Point>>();
-        }
-
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             if (ImageMatrix == null)
@@ -187,8 +173,39 @@ namespace IntelligentScissors
             if (p.X < 0 || p.X > pictureBox1.Image.Width - 1
              || p.Y < 0 || p.Y > pictureBox1.Image.Height - 1)
                 return;
-            freePoint = e.Location;
+            freePoint = p;
             pictureBox1.Invalidate();
+        }
+
+        private void pictureBox1_DoubleClick(object sender, EventArgs e)
+        {
+            MouseEventArgs eMouse = (MouseEventArgs)e;
+            if(eMouse.Button == MouseButtons.Left)
+            {
+                lasso.AddLast(new KeyValuePair<Point, List<Point>>(lasso.First.Value.Key, new List<Point>()));
+                lasso.Last.Value = new KeyValuePair<Point, List<Point>>(lasso.Last.Value.Key, ShortestPathHelpers.GetShortestPath(lasso.Last.Previous.Value.Key, lasso.Last.Value.Key, Graph.adj));
+                disableLasso();
+            }
+            else if(eMouse.Button == MouseButtons.Right)
+            {
+                lasso.Clear();
+                anchors.Clear();
+            }
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            drawPen = new Pen(Color.FromArgb(255, 255, 0, 0), 2);
+            finalPen = new Pen(Color.FromArgb(255, 0, 255, 0), 2);
+            testsBox.Items.Add("Sample1");
+            testsBox.Items.Add("Sample2");
+            testsBox.Items.Add("Sample3");
+            testsBox.Items.Add("Complete1");
+            testsBox.Items.Add("Complete2");
+            testsBox.SelectedIndex = 0;
+
+            lasso = new LinkedList<KeyValuePair<Point, List<Point>>>();
+            anchors = new HashSet<Point>();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -205,22 +222,24 @@ namespace IntelligentScissors
 
         private void updateLasso()
         {
-            Point lastAnchor = freePoint;
-            lasso.Add(lastAnchor);
+            if (anchors.Contains(freePoint) && freePoint != lasso.First.Value.Key)
+                return;
+            lasso.AddLast(new KeyValuePair<Point, List<Point>>(freePoint, new List<Point>()));
+            anchors.Add(freePoint);
             updateAnchorPaths();
-            if (lasso.Count > 1 && DrawHelpers.getAnchorRect(lastAnchor).IntersectsWith(DrawHelpers.getAnchorRect(lasso[0])))
+            if (lasso.Count > 1 && DrawHelpers.getAnchorRect(lasso.Last.Value.Key).IntersectsWith(DrawHelpers.getAnchorRect(lasso.First.Value.Key)))
                 disableLasso();
         }
 
         private void cropBtn_Click(object sender, EventArgs e)
         {
             // Add all points in one list
-            List<Point> points = new List<Point>(AnchorPaths.Values.Count);
-            for (int i=1; i < lasso.Count; i++) {
-                Point unscaled = DrawHelpers.unscaledPos(lasso[i]);
-                foreach (var point in AnchorPaths[unscaled])
+            List<Point> points = new List<Point>(lasso.Count);
+            foreach(var anchor in lasso)
+            {
+                foreach (var point in anchor.Value)
                 {
-                    points.Add(DrawHelpers.unscaledPos(point));
+                    points.Add(point);
                 }
             }
             Image cropped;
@@ -244,14 +263,15 @@ namespace IntelligentScissors
             croppedPreview.ShowDialog();
         }
 
+
         private void updateAnchorPaths()
         {
             if (lasso.Count < 2)
                 return;
-            Point srcAnchor = DrawHelpers.unscaledPos(lasso[lasso.Count - 2]);
-            Point destAnchor = DrawHelpers.unscaledPos(lasso[lasso.Count - 1]);
+            Point srcAnchor = lasso.Last.Previous.Value.Key;
+            Point destAnchor = lasso.Last.Value.Key;
 
-            AnchorPaths[destAnchor] = ShortestPathHelpers.GetShortestPath(srcAnchor, destAnchor, Graph.adj);
+            lasso.Last.Previous.Value = new KeyValuePair<Point, List<Point>>(lasso.Last.Previous.Value.Key, ShortestPathHelpers.GetShortestPath(srcAnchor, destAnchor, Graph.adj));
         }
     }
 }
