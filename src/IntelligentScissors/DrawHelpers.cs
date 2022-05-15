@@ -65,9 +65,13 @@ namespace IntelligentScissors
             }    
             return scaledP;
         }
-        private static double eucledianDistance(Point p1, Point p2)
+        public static double eucledianDistance(Point p1, Point p2)
         {
             return Math.Sqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y));
+        }
+        public static int manhattanDistance(Point p1, Point p2)
+        {
+            return Math.Abs(p1.X - p2.X) + Math.Abs(p1.Y - p2.Y);
         }
     }
 }

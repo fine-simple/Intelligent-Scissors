@@ -98,11 +98,13 @@ namespace IntelligentScissors
         private void DrawPath(List<Point>path, PaintEventArgs e)
         {
             Pen pen = lassoEnabled ? drawPen : finalPen;
+
             for (int i = 1; i < path.Count; i++)
             {
                 e.Graphics.DrawLine(pen, DrawHelpers.scaledPos(path[i - 1]), DrawHelpers.scaledPos(path[i]));
             }
         }
+        
         private void btnGaussSmooth_Click(object sender, EventArgs e)
         {
             //TODO: Add gui logic to choose type of test
@@ -273,5 +275,46 @@ namespace IntelligentScissors
 
             lasso.Last.Previous.Value = new KeyValuePair<Point, List<Point>>(lasso.Last.Previous.Value.Key, ShortestPathHelpers.GetShortestPath(srcAnchor, destAnchor, Graph.adj));
         }
+
+        #region smart anchor
+        private double averageWeight(Point p1, Point p2)
+        {
+
+            //p1 = DrawHelpers.unscaledPos(p1);
+            //p2 = DrawHelpers.unscaledPos(p2);
+
+            int diff;
+            double w1, w2;
+            if (p1.X == p2.X) // horizontal (diff in column)
+            {
+                diff = Math.Abs(p1.Y - p2.Y);
+                if (p1.Y > p2.Y) // p1 right of p2
+                {
+                    w1 = Graph.getNeighbourWeight(p1.Y, p1.X, Graph.Neighbour.Left);
+                    w2 = Graph.getNeighbourWeight(p2.Y, p2.X, Graph.Neighbour.Right);
+                }
+                else
+                {
+                    w1 = Graph.getNeighbourWeight(p1.Y, p1.X, Graph.Neighbour.Right);
+                    w2 = Graph.getNeighbourWeight(p2.Y, p2.X, Graph.Neighbour.Left);
+                }
+            }
+            else // vertical (diff in row)
+            {
+                diff = Math.Abs(p1.X - p2.X);
+                if (p1.X > p2.X) // p1 below p2
+                {
+                    w1 = Graph.getNeighbourWeight(p1.Y, p1.X, Graph.Neighbour.Top);
+                    w2 = Graph.getNeighbourWeight(p2.Y, p2.X, Graph.Neighbour.Bot);
+                }
+                else
+                {
+                    w1 = Graph.getNeighbourWeight(p1.Y, p1.X, Graph.Neighbour.Bot);
+                    w2 = Graph.getNeighbourWeight(p2.Y, p2.X, Graph.Neighbour.Top);
+                }
+            }
+            return (w1 + w2) * diff / 2;
+        }
+        #endregion
     }
 }

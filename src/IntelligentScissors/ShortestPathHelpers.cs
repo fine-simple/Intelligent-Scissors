@@ -85,8 +85,8 @@ namespace IntelligentScissors
 
             foreach(int node in ShortestPath)
             {
-                KeyValuePair<int, int> point = Graph.convert1DIndexTo2D(node);
-                Point nodePoint = new Point(point.Value, point.Key);
+                Point point = Graph.convert1DIndexTo2D(node);
+                Point nodePoint = point;
 
                 ShortestPathPoints.Add(nodePoint);
             }

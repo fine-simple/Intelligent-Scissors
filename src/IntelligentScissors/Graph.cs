@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 
 namespace IntelligentScissors
 {
@@ -13,6 +14,11 @@ namespace IntelligentScissors
         public static List<KeyValuePair<int, double>>[] adj;
         static int vertexCount;
         static int imageWidth, imageHeight;
+        public enum Neighbour
+        {
+            Top, Right, Left, Bot
+        }
+
         public static void Init(RGBPixel[,] ImageMatrix, int connectivity)
         {
             CONNECTIVITY = connectivity;
@@ -40,7 +46,73 @@ namespace IntelligentScissors
             }
         }
 
+
         #region Helper Functions
+        public static double getNeighbourWeight(int mainRow, int mainCol, Neighbour neighbourType)
+        {
+            
+            Point neighbour = getNeighbourLocation(mainRow, mainCol, neighbourType);
+
+            int indx = convert2DIndexTo1D(mainRow, mainCol);
+            int neighbourIndx = convert2DIndexTo1D(neighbour.Y, neighbour.X);
+            for (int i = 0; i < adj[indx].Count; i++)
+            {
+                if (adj[indx][i].Key == neighbourIndx)
+                    return adj[indx][i].Value;
+            }
+            return -1;
+        }
+
+        private static Point getNeighbourLocation(Point currentLocation, Neighbour neighbourType)
+        {
+            int targetRow = currentLocation.Y, targetCol = currentLocation.X;
+            switch (neighbourType)
+            {
+                case Neighbour.Right:
+                    targetCol++;
+                    break;
+                case Neighbour.Left:
+                    targetCol--;
+                    break;
+                case Neighbour.Top:
+                    targetRow--;
+                    break;
+                case Neighbour.Bot:
+                    targetRow++;
+                    break;
+                   
+            }
+            if (validIndex(targetRow, targetCol))
+                return new Point(targetCol, targetRow);
+            else
+                throw new ArgumentException("Current location doesn't have requested neighbour type!");
+        }
+        private static Point getNeighbourLocation(int row, int col, Neighbour neighbourType)
+        {
+            int targetRow = row, targetCol = col;
+            switch (neighbourType)
+            {
+                case Neighbour.Right:
+                    targetCol++;
+                    break;
+                case Neighbour.Left:
+                    targetCol--;
+                    break;
+                case Neighbour.Top:
+                    targetRow--;
+                    break;
+                case Neighbour.Bot:
+                    targetRow++;
+                    break;
+
+            }
+            if (validIndex(targetRow, targetCol))
+                return new Point(targetCol, targetRow);
+            else
+                throw new ArgumentException("Current location doesn't have requested neighbour type!");
+        }
+
+        
 
         /* the function adds the energy of current pixel to the neighbour pixel
          * and vice versa to establish the 4 way connectivity
@@ -68,6 +140,7 @@ namespace IntelligentScissors
                 int botPixelIndex = convert2DIndexTo1D(row + 1, col);
                 addEnergyToNeighbour(mainPixelIndex, botPixelIndex, botPixelEnergy);
             }
+            
         }
         private static void addEnergyToNeighbour(int mainPixelIndex, int neighbourIndex, double energy)
         {
@@ -84,12 +157,12 @@ namespace IntelligentScissors
             return row * imageWidth + col;
         }
 
-        public static KeyValuePair<int, int> convert1DIndexTo2D(int index)
+        public static Point convert1DIndexTo2D(int index)
         {
             int col = index % imageWidth;
             int row = (index-col) / imageWidth;
 
-            return new KeyValuePair<int, int>(row, col);
+            return new Point(col, row);
         }
 
         public static bool validIndex(int row, int col)
