@@ -29,7 +29,7 @@ namespace IntelligentScissors
 
                     int ind = Graph.convert2DIndexTo1D(point.Y, point.X);
                     
-                    dist[ind] = int.MaxValue;
+                    dist[ind] = double.MaxValue;
                     parent[ind] = -1;
                 }
             }
@@ -47,7 +47,7 @@ namespace IntelligentScissors
             {
                 int currentNode = PriorityQueue.Top.Value;
                 double currentCost = PriorityQueue.Top.Priority;
-
+                
                 if (currentNode == dest)
                     break;
 
