@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using QuickGraph.Collections;
 using System.Drawing;
+using System.Linq;
+using QuickGraph.Collections;
 
 namespace IntelligentScissors
 {
@@ -15,9 +14,25 @@ namespace IntelligentScissors
         private static int[] Dijkstra(int src, int dest, List<KeyValuePair<int, double>>[] adj)
         {
 
-            double[] dist = Enumerable.Repeat(double.MaxValue, adj.Count()).ToArray();
-            int [] parent = Enumerable.Repeat(-1, adj.Count()).ToArray();
+            double[] dist = new double[adj.Count()];
+            int [] parent = new int[adj.Count()];
 
+            Point source = Graph.convert1DIndexTo2D(src);
+
+            for (int x = -widthBoundary; x < widthBoundary; x++)
+            {
+                for (int y = -heightBoundary; y < heightBoundary; y++)
+                {
+                    Point point = new Point(source.X + x, source.Y + y);
+                    if (!Graph.validIndex(point.Y, point.X))
+                        continue;
+
+                    int ind = Graph.convert2DIndexTo1D(point.Y, point.X);
+                    
+                    dist[ind] = int.MaxValue;
+                    parent[ind] = -1;
+                }
+            }
             /* Using Fibonacci Heaps for a priority queue to improve asymptotic running time
              * Priority --> least cost
              * Value --> Node
@@ -70,7 +85,7 @@ namespace IntelligentScissors
                 currentNode = parent[currentNode];
             }
 
-            //Path.Reverse();
+            Path.Reverse();
 
             return Path;
         }
@@ -96,7 +111,7 @@ namespace IntelligentScissors
             return ShortestPathPoints;
         }
 
-        private static Boolean withinBounds(int node, int src)
+        public static Boolean withinBounds(int node, int src)
         {
             Point point = Graph.convert1DIndexTo2D(node);
             Point source = Graph.convert1DIndexTo2D(src);

@@ -70,10 +70,8 @@ namespace IntelligentScissors
             Thread graphConstructThread = new Thread(initGraph);
             graphConstructThread.Start();
 
-            if (pictureBox1.SizeMode == PictureBoxSizeMode.Zoom)
-                ShortestPathHelpers.setBounds(pictureBox1.Width, pictureBox1.Height);
-            else
-                ShortestPathHelpers.setBounds(ImageMatrix.GetLength(1) / 8, ImageMatrix.GetLength(0) / 8);
+
+            ShortestPathHelpers.setBounds(panel1.Width, panel1.Height);
         }
         
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -94,8 +92,10 @@ namespace IntelligentScissors
         private void DrawLiveWire(PaintEventArgs pe)
         {
             LiveWire = ShortestPathHelpers.GetShortestPath(lasso.Last.Value.Key, freePoint, Graph.adj);
+
             if (FreqEnabled && LiveWire.Count >= Frequency && Graph.validIndex(freePoint.Y, freePoint.X))
                 updateLasso();
+
             DrawPath(LiveWire, pe);
         }
         private void DrawPath(List<Point>path, PaintEventArgs e)
