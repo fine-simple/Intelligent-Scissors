@@ -187,8 +187,8 @@ namespace IntelligentScissors
             MouseEventArgs eMouse = (MouseEventArgs)e;
             if(eMouse.Button == MouseButtons.Left)
             {
-                lasso.AddLast(new KeyValuePair<Point, List<Point>>(lasso.First.Value.Key, new List<Point>()));
-                lasso.Last.Value = new KeyValuePair<Point, List<Point>>(lasso.Last.Value.Key, LiveWire);
+                List<Point> LastToFirstPath = ShortestPathHelpers.GetShortestPath(lasso.Last.Value.Key, lasso.First.Value.Key, Graph.adj);
+                lasso.AddLast(new KeyValuePair<Point, List<Point>>(lasso.First.Value.Key, LastToFirstPath));
                 disableLasso();
             }
             else if(eMouse.Button == MouseButtons.Right)
