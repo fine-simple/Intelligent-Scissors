@@ -9,7 +9,9 @@ namespace IntelligentScissors
 {
     public static class ShortestPathHelpers
     {
-        
+        private static int heightBoundary;
+        private static int widthBoundary;
+
         private static int[] Dijkstra(int src, int dest, List<KeyValuePair<int, double>>[] adj)
         {
 
@@ -44,7 +46,7 @@ namespace IntelligentScissors
                     int Child = adjNode.Key;
                     double newCost = adjNode.Value + currentCost;
 
-                    if(newCost<dist[Child])
+                    if(withinBounds(Child, src) && newCost<dist[Child])
                     {
                         dist[Child] = newCost;
                         parent[Child] = currentNode;
@@ -68,7 +70,7 @@ namespace IntelligentScissors
                 currentNode = parent[currentNode];
             }
 
-            Path.Reverse();
+            //Path.Reverse();
 
             return Path;
         }
@@ -92,6 +94,21 @@ namespace IntelligentScissors
             }
 
             return ShortestPathPoints;
+        }
+
+        private static Boolean withinBounds(int node, int src)
+        {
+            Point point = Graph.convert1DIndexTo2D(node);
+            Point source = Graph.convert1DIndexTo2D(src);
+            Boolean withinWidth = (point.X <= source.X + widthBoundary) && (point.X >= source.X - widthBoundary);
+            Boolean withinHeight = (point.Y <= source.Y + heightBoundary) && (point.Y >= source.Y - heightBoundary);
+            return withinHeight && withinWidth;
+        }
+
+        public static void setBounds(int width, int height)
+        {
+            heightBoundary = height;
+            widthBoundary = width;
         }
     }
 }

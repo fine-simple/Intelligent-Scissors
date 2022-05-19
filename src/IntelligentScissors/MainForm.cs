@@ -23,6 +23,7 @@ namespace IntelligentScissors
         // Shortest Path between each Anchor and the one before it (starts from second anchor)
         LinkedList<KeyValuePair<Point, List<Point>>> lasso;
         HashSet<Point> anchors;
+        List<Point> LiveWire;
 
         public MainForm()
         {
@@ -47,9 +48,6 @@ namespace IntelligentScissors
             //Open the browsed image and display it
             string OpenedFilePath = openFileDialog1.FileName;
             ImageMatrix = ImageOperations.OpenImage(OpenedFilePath);
-            double sigma = 1;
-            int maskSize = 3;
-            //ImageMatrix = ImageOperations.GaussianFilter1D(ImageMatrix, maskSize, sigma);
             ImageOperations.DisplayImage(ImageMatrix, pictureBox1);
 
             txtWidth.Text = ImageOperations.GetWidth(ImageMatrix).ToString();
@@ -71,6 +69,11 @@ namespace IntelligentScissors
             panel1.Hide();
             Thread graphConstructThread = new Thread(initGraph);
             graphConstructThread.Start();
+
+            if (pictureBox1.SizeMode == PictureBoxSizeMode.Zoom)
+                ShortestPathHelpers.setBounds(pictureBox1.Width, pictureBox1.Height);
+            else
+                ShortestPathHelpers.setBounds(ImageMatrix.GetLength(1) / 8, ImageMatrix.GetLength(0) / 8);
         }
         
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -90,7 +93,7 @@ namespace IntelligentScissors
 
         private void DrawLiveWire(PaintEventArgs pe)
         {
-            List<Point> LiveWire = ShortestPathHelpers.GetShortestPath(lasso.Last.Value.Key, freePoint, Graph.adj);
+            LiveWire = ShortestPathHelpers.GetShortestPath(lasso.Last.Value.Key, freePoint, Graph.adj);
             if (FreqEnabled && LiveWire.Count >= Frequency && Graph.validIndex(freePoint.Y, freePoint.X))
                 updateLasso();
             DrawPath(LiveWire, pe);
@@ -185,7 +188,7 @@ namespace IntelligentScissors
             if(eMouse.Button == MouseButtons.Left)
             {
                 lasso.AddLast(new KeyValuePair<Point, List<Point>>(lasso.First.Value.Key, new List<Point>()));
-                lasso.Last.Value = new KeyValuePair<Point, List<Point>>(lasso.Last.Value.Key, ShortestPathHelpers.GetShortestPath(lasso.Last.Previous.Value.Key, lasso.Last.Value.Key, Graph.adj));
+                lasso.Last.Value = new KeyValuePair<Point, List<Point>>(lasso.Last.Value.Key, LiveWire);
                 disableLasso();
             }
             else if(eMouse.Button == MouseButtons.Right)
@@ -273,7 +276,7 @@ namespace IntelligentScissors
             Point srcAnchor = lasso.Last.Previous.Value.Key;
             Point destAnchor = lasso.Last.Value.Key;
 
-            lasso.Last.Previous.Value = new KeyValuePair<Point, List<Point>>(lasso.Last.Previous.Value.Key, ShortestPathHelpers.GetShortestPath(srcAnchor, destAnchor, Graph.adj));
+            lasso.Last.Previous.Value = new KeyValuePair<Point, List<Point>>(lasso.Last.Previous.Value.Key, LiveWire);
         }
 
         #region smart anchor
