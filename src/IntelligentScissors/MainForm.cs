@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -38,13 +39,37 @@ namespace IntelligentScissors
             Invoke(new Action(() => {
                 panel1.Show();
                 graphInfoLbl.Text = $"Graph Constructed in {(sw.ElapsedMilliseconds / 1000.0).ToString()} seconds";
+                //fileWriteLbl.Text = "Saving graph...";
             }));
+            //using (StreamWriter sw = new StreamWriter("graph.txt"))
+            //{
+            //    sw.WriteLine("Graph");
+            //    sw.WriteLine("Vertex [vertex number]: (Vertex, weight),..");
+                
+            //    for (int i = 0; i < Graph.adj.Length; i++)
+            //    {
+            //        sw.Write("Vertex " + i + ": ");
+            //        for (int j = 0; j < Graph.adj[i].Count; j++)
+            //        {
+            //            sw.Write($"({Graph.adj[i][j].Key},{Graph.adj[i][j].Value})");
+            //            if ( j < Graph.adj[i].Count - 1)
+            //                sw.Write(",");
+            //        }
+            //        sw.Write("\n");
+            //    }
+            //}
+            //Invoke(new Action(() =>
+            //{
+            //    fileWriteLbl.Text = "Saved to graph.txt";
+            //}));
         }
         private void btnOpen_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             if (openFileDialog1.ShowDialog() != DialogResult.OK)
                 return;
+            fileWriteLbl.Text = "";
+            graphInfoLbl.Text = "";
             //Open the browsed image and display it
             string OpenedFilePath = openFileDialog1.FileName;
             ImageMatrix = ImageOperations.OpenImage(OpenedFilePath);

@@ -122,8 +122,8 @@ namespace IntelligentScissors
 
         public static void setBounds(int width, int height)
         {
-            heightBoundary = height;
-            widthBoundary = width;
+            heightBoundary = height / 2;
+            widthBoundary = width / 2;
         }
     }
 }

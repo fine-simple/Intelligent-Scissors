@@ -46,6 +46,7 @@ namespace IntelligentScissors
             this.cropBtn = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.graphInfoLbl = new System.Windows.Forms.ToolStripStatusLabel();
+            this.fileWriteLbl = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -227,17 +228,24 @@ namespace IntelligentScissors
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.graphInfoLbl});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 618);
+            this.graphInfoLbl,
+            this.fileWriteLbl});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 616);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1215, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1215, 24);
             this.statusStrip1.TabIndex = 24;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // graphInfoLbl
             // 
             this.graphInfoLbl.Name = "graphInfoLbl";
-            this.graphInfoLbl.Size = new System.Drawing.Size(0, 16);
+            this.graphInfoLbl.Size = new System.Drawing.Size(0, 18);
+            // 
+            // fileWriteLbl
+            // 
+            this.fileWriteLbl.Name = "fileWriteLbl";
+            this.fileWriteLbl.Padding = new System.Windows.Forms.Padding(100, 0, 0, 0);
+            this.fileWriteLbl.Size = new System.Drawing.Size(100, 18);
             // 
             // MainForm
             // 
@@ -294,6 +302,7 @@ namespace IntelligentScissors
         private System.Windows.Forms.Button cropBtn;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel graphInfoLbl;
+        private System.Windows.Forms.ToolStripStatusLabel fileWriteLbl;
     }
 }
 

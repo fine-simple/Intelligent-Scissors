@@ -27,8 +27,8 @@ namespace IntelligentScissors
             imageWidth = ImageMatrix.GetLength(1);
 
             vertexCount = imageWidth * imageHeight;
-            
-            adj = new List<KeyValuePair<int, double>>[vertexCount] // O(N^2)
+
+            adj = new List<KeyValuePair<int, double>>[vertexCount]; 
 
             constructGraph(ImageMatrix);
         }
