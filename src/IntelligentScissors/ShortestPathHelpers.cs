@@ -10,15 +10,21 @@ namespace IntelligentScissors
     {
         private static int heightBoundary;
         private static int widthBoundary;
-
+        /*
+         * maps boundary box to original image indecies
+         * Key: original index, Value: index in boundary box
+         */
+        private static Dictionary<int, int> index = new Dictionary<int, int>();
+        
         private static int[] Dijkstra(int src, int dest, List<KeyValuePair<int, double>>[] adj)
         {
 
-            double[] dist = new double[adj.Count()];
-            int [] parent = new int[adj.Count()];
+            double[] dist = new double[heightBoundary*widthBoundary * 4];
+            int[] parent = new int[heightBoundary * widthBoundary * 4];
 
             Point source = Graph.convert1DIndexTo2D(src);
 
+            int i = 0;
             for (int x = -widthBoundary; x < widthBoundary; x++)
             {
                 for (int y = -heightBoundary; y < heightBoundary; y++)
@@ -27,10 +33,12 @@ namespace IntelligentScissors
                     if (!Graph.validIndex(point.Y, point.X))
                         continue;
 
-                    int ind = Graph.convert2DIndexTo1D(point.Y, point.X);
+                    int originalIndex = Graph.convert2DIndexTo1D(point.Y, point.X);
+
+                    index[originalIndex] = i;
                     
-                    dist[ind] = double.MaxValue;
-                    parent[ind] = -1;
+                    dist[i] = double.MaxValue;
+                    parent[i++] = -1;
                 }
             }
             /* Using Fibonacci Heaps for a priority queue to improve asymptotic running time
@@ -41,7 +49,7 @@ namespace IntelligentScissors
             FibonacciHeap<double, int> PriorityQueue = new FibonacciHeap<double, int>();
 
             PriorityQueue.Enqueue(0, src);
-            dist[src] = 0;
+            dist[index[src]] = 0;
 
             while(!PriorityQueue.IsEmpty)
             {
@@ -53,7 +61,7 @@ namespace IntelligentScissors
 
                 PriorityQueue.Dequeue();
 
-                if (currentCost > dist[currentNode])
+                if (currentCost > dist[index[currentNode]])
                     continue;
 
                 foreach(KeyValuePair<int, double> adjNode in adj[currentNode])
@@ -61,10 +69,12 @@ namespace IntelligentScissors
                     int Child = adjNode.Key;
                     double newCost = adjNode.Value + currentCost;
 
-                    if(withinBounds(Child, src) && newCost<dist[Child])
+                    if (!withinBounds(Child, src))
+                        continue; 
+                    if(newCost<dist[index[Child]])
                     {
-                        dist[Child] = newCost;
-                        parent[Child] = currentNode;
+                        dist[index[Child]] = newCost;
+                        parent[index[Child]] = currentNode;
                         PriorityQueue.Enqueue(newCost, Child);
                     }
                 }
@@ -78,14 +88,14 @@ namespace IntelligentScissors
         {
             List<int> Path = new List<int>();
             int currentNode = Dest;
-
-            while(parent[currentNode]!=-1)
+            while(parent[index[currentNode]]!=-1)
             {
-                Path.Add(parent[currentNode]);
-                currentNode = parent[currentNode];
+                Path.Add(currentNode);
+                currentNode = parent[index[currentNode]];
             }
 
             Path.Reverse();
+            index.Clear();
 
             return Path;
         }
@@ -94,6 +104,9 @@ namespace IntelligentScissors
         {
             int src = Graph.convert2DIndexTo1D(srcPoint.Y, srcPoint.X);
             int dest = Graph.convert2DIndexTo1D(destPoint.Y, destPoint.X);
+
+            if (!withinBounds(dest, src))
+                return new List<Point>();
 
             int[] parent = Dijkstra(src, dest, adj);
             List<int> ShortestPath = GetPath(parent, dest);
@@ -115,15 +128,15 @@ namespace IntelligentScissors
         {
             Point point = Graph.convert1DIndexTo2D(node);
             Point source = Graph.convert1DIndexTo2D(src);
-            Boolean withinWidth = (point.X <= source.X + widthBoundary) && (point.X >= source.X - widthBoundary);
-            Boolean withinHeight = (point.Y <= source.Y + heightBoundary) && (point.Y >= source.Y - heightBoundary);
+            Boolean withinWidth = (point.X < source.X + widthBoundary) && (point.X > source.X - widthBoundary);
+            Boolean withinHeight = (point.Y < source.Y + heightBoundary) && (point.Y > source.Y - heightBoundary);
             return withinHeight && withinWidth;
         }
 
         public static void setBounds(int width, int height)
         {
-            heightBoundary = height / 2;
-            widthBoundary = width / 2;
+            heightBoundary = height;
+            widthBoundary = width;
         }
     }
 }
