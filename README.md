@@ -3,9 +3,11 @@ Selection tools can be used to select objects in an image to resize/delete/copy/
 
 In Photoshop, there is a more advanced version of ordinary lasso’s called **Magnetic Lasso Tool**.   Magnetic Lasso Tool is a lasso that automatically snaps to the objects’ boundaries. You can watch a demo of it [here](https://www.youtube.com/watch?v=0rQEctxkjBM&ab_channel=CreativeBloq).
 
-photo of car
-
-The technical term for the Magnetic Lasso Tool is Livewire or **Intelligent Scissors**. In this project we want to implement a simple magnetic lasso using image processing, graphs, and greedy algorithms.
+<p align="center">
+  <img src=https://user-images.githubusercontent.com/60978780/170697787-e6675309-9129-493f-8980-209731af41ee.png><br>
+  <sub>Car Selected using magnetic lasso tool</sub>
+</p>
+The technical term for the Magnetic Lasso Tool is Livewire or <strong>Intelligent Scissors</strong>. In this project we want to implement a simple magnetic lasso using image processing, graphs, and greedy algorithms.
 
 ## Features
 • Real-time livewire drawing 
