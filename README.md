@@ -20,5 +20,13 @@ The technical term for the Magnetic Lasso Tool is Livewire or <strong>Intelligen
 
 • Simple GUI
 
+## Screenshots
 
+| ![is_1][01] | ![is_2][02] |
+| --- | --- |
+| ![is_3][03] | ![is_4][04] |
 
+[01]: https://imgur.com/kblo4GR.jpg
+[02]: https://imgur.com/Wa4pyBy.jpg
+[03]: https://imgur.com/oykXWJw.jpg
+[04]: https://imgur.com/A7Pf6Mo.jpg
